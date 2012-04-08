@@ -1,0 +1,45 @@
+/**
+ * SCGen stylesheet
+ *
+ */
+@CHARSET "UTF-8";
+
+@media all {
+    body {
+        padding-top: 60px;
+        font-family: verdana, helvetica, sans-serif;
+    }
+
+    textarea {
+        font-family: consolas, courier-new, monospace;
+    }
+
+    footer {
+        text-align: center;
+        font-size: smaller;
+        color: grey;
+    }
+
+    #generated_config {
+        height: 100%;
+        width: 100%;
+
+        min-height: 200em;
+    }
+
+    #template_container {
+        display: none;
+    }
+
+} 
+
+@media print {
+    .no-print {
+        display: none;
+    }
+    
+    body {
+        margin: 0;
+    }
+}
+

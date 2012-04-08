@@ -1,0 +1,334 @@
+/**
+ * Default switch config
+ *
+ * Generate hashtype 5 passwords using 'openssl passwd -1 -salt pdQG -table foo'
+ */
+var switch_config = {
+
+    global: {
+
+        'service_nagle':                false,
+        'service_pad':                  false,
+        'service_tcp-keepalives-in':    false,
+        'service_tcp-keepalives-out':   false,
+        'service_timestamps_debug':     true,
+        'service_timestamps_log':       true,
+        'service_password-encryption':  true,
+        'service_compress-config':      false,
+
+        'hostname': 'switch',
+
+        'enable_secret': {
+            selected: '5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.',
+            options: {
+                'cisco': '5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.',
+            },
+        },
+
+        'storm-control_multicast':      false,
+        'logon_failure_trap':           true,
+        'file_verify_auto':             false,
+        
+        'power_redundancy-mode': {
+            selected: 'redundant'
+        },
+
+        'system_mtu':                   1552,
+
+        'vlan_internal_allocation_policy': {
+            selected: 'descending',
+        },
+
+        'logging_exception':            16000,
+        'logging_buffered':             16384,
+        'logging_console':              true,
+
+        'clock_timezone':               'GMT 0',
+        'clock_summertime':             'BST recurring last Sun Mar 2:00 last Sun Oct 2:00',
+
+        'vtp_mode':                     'transparent',
+
+        'udld':                         'aggressive',
+
+        'ip_subnet-zero':               true,
+        'ip_source-route':              false,
+        'ip_domain-lookup':             false,
+        'ip_bootp_server':              false,
+        'ip_verify_header_vlan':        false,
+
+        'ip_hosts': {
+            options: {
+                'gateway':          'gateway 192.168.0.1',
+            },
+        },
+
+        'ip_routes': {
+            options: {
+                'default via 192.168.0.1': '0.0.0.0 0.0.0.0 192.168.0.1',
+            },
+        },
+
+        'errdisable_recovery_interval': 300,
+        'errdisable_recovery_udld':     true,
+        'errdisable_recovery_link-flap': true,
+        'errdisable_recovery_gbic-invalid': true,
+        'errdisable_recovery_storm-control': true,
+
+        'spanning-tree_mode':           'rapid-pvst+',
+        'spanning-tree_portfast_bpduguard_default': true,
+        'spanning-tree_extend':         true,
+
+        'spanning-tree_disable': {
+            // none by default
+        },
+
+        'logging_events_link-status':   true,
+        'logging_events_trunk-status':  true,
+        'logging_sourceinterface': '',
+        'logging_servers': {
+            options: {
+                '192.168.0.1': '192.168.0.1',
+            },
+        },
+
+        'ntp_source':                   '',
+        'ntp_servers': {
+            options: {
+                '192.168.0.1': '192.168.0.1',
+            },
+        },
+
+       'banner_exec':                   "^C\n" +
+"*********************************************************\n" +
+"* This system is owned by $COMPANY-X%. If you are not   *\n" +
+"* authorized to access this system, exit immediately.   *\n" +
+"* Unauthorized access to this system is forbidden by    *\n" +
+"* company policies, national, and international laws.   *\n" +
+"* Unauthorized users are subject to criminal and civil  *\n" +
+"* penalties as well as company initiated disciplinary   *\n" +
+"* proceedings.                                          *\n" +
+"*                                                       *\n" +
+"* By entry into this system you acknowledge that you    *\n" +
+"* are authorized access and the level of privilege you  *\n" +
+"* subsequently execute on this system. You further      *\n" +
+"* acknowledge that by entry into this system you        *\n" +
+"* expect no privacy from monitoring.                    *\n" +
+"*********************************************************\n" +
+"^C",
+
+       'banner_login':                  "^C\n" +
+"*********************************************************\n" +
+"* This system is owned by %COMPANY-X%. If you are not   *\n" +
+"* authorized to access this system, exit immediately.   *\n" +
+"* Unauthorized access to this system is forbidden by    *\n" +
+"* company policies, national, and international laws.   *\n" +
+"* Unauthorized users are subject to criminal and civil  *\n" +
+"* penalties as well as company initiated disciplinary   *\n" +
+"* proceedings.                                          *\n" +
+"*                                                       *\n" +
+"* By entry into this system you acknowledge that you    *\n" +
+"* are authorized access and the level of privilege you  *\n" +
+"* subsequently execute on this system. You further      *\n" +
+"* acknowledge that by entry into this system you        *\n" +
+"* expect no privacy from monitoring.                    *\n" +
+"*********************************************************\n" +
+"^C",
+
+       'line_con_exectimeout':          '15 0',
+       'line_con_password': {
+            selected: '5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.',
+            options: {
+                'cisco': '5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.',
+            },
+        },
+
+       'line_vty04_exectimeout':        '15 0',
+       'line_vty04_password': {
+            selected: '5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.',
+            options: {
+                'cisco': '5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.',
+            },
+        },
+
+       'line_vty515_exectimeout':        '15 0',
+       'line_vty515_password': {
+            selected: '5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.',
+            options: {
+                'cisco': '5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.',
+            },
+        },
+    
+    },
+
+    aliases: {
+       'sid': {
+           context: 'exec',
+           command: 'show interface description',
+       },
+    },
+
+    vlans: {
+        10: {
+            description:    'Management',
+            required:       false,
+        },
+
+    },
+    
+    interfaces: [
+        {
+            type:           'GigabitEthernet',
+            slot:           1,
+            subslot:        0,
+            start:          1,
+            count:          24,
+            standard:       'ciscoSwitchUnusedPort',
+        },
+    ],
+
+    svi: {
+        10: {
+            description:    'Management interface',
+            enable:         true,
+            address:        '192.168.0.2',
+            mask:           '255.255.255.0',
+        },
+    },
+
+    standards: {
+        interfaces: {
+            unusedPort: { /*{{{*/
+                description: 'Unused Port',
+                standard: {
+                    enable: {
+                        description: [ "%1" ],
+                        switchport: null,
+                        switchport_mode: [ "access" ],
+                        switchport_access_vlan: [ "1" ],
+                        switchport_nonegotiate: null,
+                        logging_event: [ "link-status" ],
+                        snmp_trap: [ "link-status" ],
+                        shutdown: null,
+                    },
+                    disable: {
+                        cdp_enable: null,
+                    },
+                },
+                portChannelMaster: {
+                    enable: {
+                        description: [ "%1" ],
+                        switchport: null,
+                        switchport_mode: [ "access" ],
+                        switchport_access_vlan: [ "1" ],
+                        shutdown: null,
+                    },
+                    disable: {
+                        cdp_enable: null,
+                    },
+                },
+            }, /*}}}*/
+    
+            accessPort: { /*{{{*/
+                description: 'Access Port',
+                standard: {
+                    parameters: [
+                        'ispSwitchportAccessVLAN',
+                        'ispSpeedDuplex',
+                    ],
+                    enable: {
+                        description: [ "%1" ],
+                        switchport: null,
+                        switchport_mode: [ "access" ],
+                        switchport_access_vlan: [ "%1" ],
+                        switchport_nonegotiate: null,
+                        logging_event: [ "link-status" ],
+                        snmp_trap: [ "link-status" ],
+                        speed: [ "%1" ],
+                        duplex: [ "%1" ],
+                        spanningtree_portfast: null,
+                        spanningtree_bpduguard: null,
+                        cdp_enable: null,
+                    },
+                    disable: {
+                        shutdown: null,
+                    },
+                },
+                portChannelMaster: {
+                    parameters: [
+                        'ispSwitchportAccessVLAN',
+                    ],
+                    enable: {
+                        description: [ "%1" ],
+                        switchport: null,
+                        switchport_mode: [ "access" ],
+                        switchport_access_vlan: [ "%1" ],
+                        switchport_nonegotiate: null,
+                        logging_event: [ "link-status" ],
+                        snmp_trap: [ "link-status" ],
+                        spanningtree_portfast: null,
+                        spanningtree_bpduguard: null,
+                        cdp_enable: null,
+                    },
+                    disable: {
+                        shutdown: null,
+                    },
+                },
+            }, /*}}}*/
+
+            trunkPort: { /*{{{*/
+                description: 'Trunk Port',
+                standard: {
+                    parameters: [
+                        'ispSwitchportTrunk',
+                        'ispSpeedDuplex',
+                    ],
+                    enable: {
+                        description: [ "%1" ],
+                        switchport: null,
+                        switchport_mode: [ "trunk" ],
+                        switchport_trunk_encapsulation: [ "dot1q" ],
+                        switchport_access_vlan: [ "1" ],
+                        switchport_trunk_native_vlan: [ "%1" ], 
+                        switchport_trunk_allowed_vlan: [ "%1" ],
+                        switchport_nonegotiate: null,
+                        logging_event: [ "link-status" ],
+                        snmp_trap: [ "link-status" ],
+                        speed: [ "%1" ],
+                        duplex: [ "%1" ],
+                        spanningtree_portfast: null,
+                        spanningtree_bpduguard: null,
+                        cdp_enable: null,
+                    },
+                    disable: {
+                        shutdown: null,
+                    },
+                },
+                portChannelMaster: {
+                    parameters: [
+                        'ispSwitchportTrunk',
+                    ],
+                    enable: {
+                        description: [ "%1" ],
+                        switchport: null,
+                        switchport_mode: [ "trunk" ],
+                        switchport_trunk_encapsulation: [ "dot1q" ],
+                        switchport_access_vlan: [ "4093" ],
+                        switchport_trunk_native_vlan: [ "%1" ], 
+                        switchport_trunk_allowed_vlan: [ "%1" ],
+                        switchport_nonegotiate: null,
+                    },
+                    disable: {
+                        cdp_enable: null,
+                        shutdown: null,
+                    },
+                },
+            }, /*}}}*/
+        },
+    },
+};
+
+$('document').ready(function() {
+    scgen.load(switch_config);
+});
+
+/* vim: set ft=javascript ts=4 expandtab : */

@@ -1,0 +1,1077 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <title>Cisco Switch Config Generator</title>
+
+        <!-- JQuery //-->
+        <script src="jquery-1.7.1.min.js"></script>
+
+        <!-- Bootstrap //-->
+        <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+        <script type="text/javascript" src="bootstrap.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="styles.css" />
+        <script src="sihnon-framework.js"></script>
+        <script src="scripts.js"></script>
+        <script src="default-config.js"></script>
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top no-print">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="#">Config Generator</a>
+
+                    <ul class="nav">
+                        <li class="active"><a href="#">Cisco Switch</a></li>
+                        <li class=""><a href="#">Help</a></li>
+                    </ul>
+                </div><!-- /tobar-inner -->
+            </div><!-- /container-fliud -->
+        </div><!-- /topbar -->
+
+        <div class="container">
+            <div class="row">
+                <div class="span6">
+                    <form id="config_form" class="form-horizontal">
+                        <h2>Global Configuration</h2>
+                        <fieldset id="general_fields">
+                            <legend for="general_fields">Global</legend>
+
+                            <div class="control-group">
+                                <label class="control-label">Services</label>
+                                <div class="controls">
+                                    <label for="service_nagle" class="checkbox">
+                                        <input type="checkbox" id="service_nagle" name="service" value="nagle" class="global"/>
+                                        Nagle
+                                    </label>
+                                    <label for="service_pad" class="checkbox">
+                                        <input type="checkbox" id="service_pad" name="service" value="pad" class="global"/>
+                                        Pad
+                                    </label>
+                                    <label for="service_tcp-keepalives-in" class="checkbox">
+                                        <input type="checkbox" id="service_tcp-keepalives-in" name="service" value="tcp-keepalives-in" class="global"/>
+                                        TCP keep-alives (in)
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="service_tcp-keepalives-out" name="service" value="tcp-keepalives-out" class="global"/>
+                                        TCP keep-alives (out)
+                                    </label>
+                                    <label for="service_timestamps_debug" class="checkbox">
+                                        <input type="checkbox" id="service_timestamps_debug" name="service" value="timestamps debug" class="global"/>
+                                        Debug Timestamps
+                                    </label>
+                                    <label for="service_timestamps_log" class="checkbox">
+                                        <input type="checkbox" id="service_timestamps_log" name="service" value="timestamps log" class="global"/>
+                                        Log Timestamps
+                                    </label>
+                                    <label for="service_password-encryption" class="checkbox">
+                                        <input type="checkbox" id="service_password-encryption" name="service" value="password-encryption" class="global"/>
+                                        Password Encryption
+                                    </label>
+                                    <label for="service_compress-config" class="checkbox">
+                                        <input type="checkbox" id="service_compress-config" name="service" value="compress-config" class="global"/>
+                                        Config Compression
+                                    </label>
+                                </div><!-- /controls -->
+                            </div><!-- /control-group -->
+
+                            <div class="control-group">
+                                <label class="control-label" for="hostname">Hostname</label>
+                                <div class="controls">
+                                    <input type="text" id="hostname" name="hostname" value="" class="global validate not_empty" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="enable_secret">Enable Password</label>
+                                <div class="controls">
+                                    <select id="enable_secret" name="enable_secret" class="global">
+                                        <!-- No passwords defined by default -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="storm-control_multicast">Storm Control includes multicast</label>
+                                <div class="controls">
+                                    <input type="checkbox" id="storm-control_multicast" name="stormcontrol_multicast" class="global" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="logon_failure_trap">Trap Logon Failures</label>
+                                <div class="controls">
+                                    <input type="checkbox" id="logon_failure_trap" name="logon_failure_trap" class="global">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="file_verify_auto">Verify files automatically</label>
+                                <div class="controls">
+                                    <input type="checkbox" id="file_verify_auto" name="file_verify_auto" class="global">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="power_redundancy-mode">Power Redundancy Mode</label>
+                                <div class="controls">
+                                    <select id="power_redundancy-mode" name="power_redundancymode" class="global">
+                                        <option value="combined">Combined</option>
+                                        <option value="redundant" selected="selected">Redundant</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="system_mtu">System MTU</label>
+                                <div class="controls">
+                                    <input type="text" id="system_mtu" name="system_mtu" value="1552" maxlength="4" class="global validate not_empty numeric" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="vlan_internal_allocation_policy">Internal Allocation Policy</label>
+                                <div class="controls">
+                                    <select id="vlan_internal_allocation_policy" name="vlan_internal_allocation_policy" class="global">
+                                        <option value="ascending">Ascending</option>
+                                        <option value="descending">Descending</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </fieldset>
+
+                        <fieldset id="logging_fields"><!--{{{-->
+                            <legend for="logging_fields">Logging</legend>
+
+                            <div class="control-group">
+                                <label class="control-label" for="logging_exception">Exception Logging</label>
+                                <div class="controls">
+                                    <input type="text" id="logging_exception" name="logging_exception" value="16000" class="global validate not_empty numeric"/>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="logging_buffered">Buffered Logging</label>
+                                <div class="controls">
+                                    <input type="text" id="logging_buffered" name="logging_buffered" value="16384" class="global validate not_empty numeric"/>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="logging_console">Console Logging</label>
+                                <div class="controls">
+                                    <input type="checkbox" id="logging_console" name="logging_console" class="global"/>
+                                </div>
+                            </div>
+                        </fieldset><!--}}}-->
+
+                        <!-- Clock settings -->
+                        <fieldset><!--{{{-->
+                            <legend>Clock</legend>
+
+                            <div class="control-group">
+                                <label class="control-label" for="clock_timezone">Timezone</label>
+                                <div class="controls">
+                                    <input type="text" id="clock_timezone" name="clock_timezone" class="global" value="GMT 0" readonly="readonly" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="clock_summertime">Summer time</label>
+                                <div class="controls">
+                                    <input type="text" id="clock_summertime" name="clock_summertime" class="global" value="BST recurring last Sun Mar 2:00 last Sun Oct 2:00" readonly="readonly" />
+                                </div>
+                            </div>
+                        </fieldset>
+ 
+                        <!-- QoS: TODO -->
+                        <fieldset>
+                            <legend>QoS</legend>
+            
+                            <p><em>Not yet supported</em></p>
+                        </fieldset>
+
+                        <!-- VTP -->
+                        <fieldset>
+                            <legend>VTP</legend>
+
+                            <div class="control-group">
+                                <label class="control-label" for="vtp_mode">Mode</label>
+                                <div class="controls">
+                                    <input type="text" id="vtp_mode" name="vtp_mode" class="global" value="transparent" readonly="readonly" />
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- UDLD -->
+                        <fieldset>
+                            <legend>UDLD</legend>
+                            <div class="control-group">
+                                <label class="control-label" for="udld">Mode</label>
+                                <div class="controls">
+                                    <input type="text" id="udld" name="udld" class="global" value="aggressive" readonly="readonly" />
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset><!--{{{-->
+                            <legend>IP Layer</legend>
+
+                            <div class="control-group">
+                                <label class="control-label">Options</label>
+                                <div class="controls">
+                                    <label for="ip_subnet-zero" class="checkbox">
+                                        <input type="checkbox" id="ip_subnet-zero" name="ip" value="subnet zero" class="global" checked="checked" />
+                                        Use Subnet Zero
+                                    </label>
+                                    <label class="checkbox" for="ip_source-route">
+                                        <input type="checkbox" id="ip_source-route" name="ip" value="source-route" class="global" />
+                                        Allow Source Routing
+                                    </label>
+                                    <label class="checkbox" for="ip_domain-lookup">
+                                        <input type="checkbox" id="ip_domain-lookup" name="ip" value="domain-lookup" class="global" />
+                                        Lookup Domain Names
+                                    </label>
+                                    <label class="checkbox" for="ip_bootp_server">
+                                        <input type="checkbox" id="ip_bootp_server" name="ip" value="bootp server" class="global"/>
+                                        Enable Bootp Server
+                                    </label>
+                                    <label class="checkbox" for="ip_verify_header_vlan">
+                                        <input type="checkbox" id="ip_verify_header_vlan" name="ip" value="verify header vlan all" class="global"/>
+                                        Verify Vlan Headers
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-group" for="ip_hosts">Hosts</label>
+                                <div class="controls">
+                                    <select id="ip_hosts" name="ip_hosts" multiple="multiple" class="global list">
+                                        <!-- No hosts entries by default -->
+                                    </select>
+                                    <div>
+                                        <button class="btn btn-danger" id="ip_hosts_remove">Remove Selected Hosts</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Add Host</label>
+                                <div class="controls">
+                                    <input type="text" id="ip_hosts_new_name" placeholder="Hostname" />
+                                    <input type="text" id="ip_hosts_new_ip" placeholder="IP Address" />
+                                    <div>
+                                        <button class="btn btn-success" id="ip_hosts_add">Add Host</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="ip_routes">Routes</label>
+                                <div class="controls">
+                                    <select id="ip_routes" name="ip_routes" multiple="multiple" class="global list">
+                                        <!-- No routes definedd by default -->
+                                    </select>
+                                    <div>
+                                        <button class="btn btn-danger" id="ip_routes_remove"/>Remove Selected Routes</button>
+                                    </div>
+                                </div>
+                             </div>
+                             <div class="control-group">
+                                 <label class="control-label">Add Route</label>
+                                 <div class="controls">
+                                    <input type="text" id="ip_routes_new_network" placeholder="Network Address" />
+                                    <input type="text" id="ip_routes_new_subnet" placeholder="Subnet Mask" />
+                                    <input type="text" id="ip_routes_new_gateway" placeholder="Gateway Address" />
+                                    <div>
+                                        <button class="btn btn-success" id="ip_routes_add">Add Route</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset><!--}}}-->
+
+
+                        <fieldset><!--{{{-->
+                            <legend>Errdisable Recovery</legend>
+
+                            <div class="control-group">
+                                <label class="control-label" for="errdisable_recovery_interval">Errdisable recovery timer interval</label>
+                                <div class="controls">
+                                    <input type="text" id="errdisable_recovery_interval" name="errdisable_recovery_interval" class="global validate not_empty numeric" value="360" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="errdisable_recovery_cause">Automated recovery</label>
+                                <div class="controls">
+
+                                    <label class="checkbox" for="errdisable_recovery_udld">
+                                        <input type="checkbox" id="errdisable_recovery_udld" name="errdisable_recovery_cause" value="udld" checked="checked" class="global" />
+                                        UDLD
+                                    </label>
+                                    <label class="checkbox" for="errdisable_recovery_link-flap">
+                                        <input type="checkbox" id="errdisable_recovery_link-flap" name="errdisable_recovery_cause" value="link-flap" checked="checked" class="global" />
+                                        Link Flap
+                                    </label>
+                                    <label class="checkbox" for="errdisable_recovery_gbic-invalid">
+                                        <input type="checkbox" id="errdisable_recovery_gbic-invalid" name="errdisable_recovery_cause" value="gbic-invalid" checked="checked" class="global" />
+                                        GBIC Invalid
+                                    </label>
+                                    <label class="checkbox" for="errdisable_recovery_storm-control">
+                                        <input type="checkbox" id="errdisable_recovery_storm-control" name="errdisable_recovery_cause" value="storm-control" checked="checked" class="global" />
+                                        Storm Control
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset><!--}}}-->
+
+                        <fieldset><!--{{{-->
+                            <legend>Spanning Tree</legend>
+
+                            <div class="control-group">
+                                <label class="control-label" for="spanning-tree_mode">Mode</label>
+                                <div class="controls">
+                                    <select id="spanning-tree_mode" name="spanningtree_mode" class="global">
+                                        <option value="pvst">PVST</option>
+                                        <option value="rapid-pvst" selected="selected">Rapid PVST</option>
+                                        <option value="mst">MST</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="spanning-tree_portfast_bpduguard_default">Enable PortFast and BPDUGuard by default?</label>
+                                <div class="controls">
+                                    <input type="checkbox" id="spanning-tree_portfast_bpduguard_default" name="spanningtree_portfast_bpduguard_default" checked="checked" class="global" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="spanning-tree_extend">Use system-id extension?</label>
+                                <div class="controls">
+                                    <input type="checkbox" id="spanning-tree_extend" name="spanningtree_extend" checked="checked" class="global" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="spanning-tree_disable">Disable STP for VLANs</label>
+                                <div class="controls">
+                                    <select id="spanning-tree_disable" name="spanningtree_disable" multiple="multiple" class="global list">
+                                        <!-- Spanning tree not disabled on any VLANs by default -->
+                                    </select>
+                                    <div>
+                                        <button class="btn btn-danger" id="spanning-tree_disable_remove">Remove Selected VLAN</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="spanning-tree_disable_new">VLAN</label>
+                                <div class="controls">
+                                    <input type="text" id="spanning-tree_disable_new" placeholder="VLAN ID" />
+                                    <div>
+                                        <button class="btn btn-success" id="spanning-tree_disable_add">Add VLAN</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset><!--{{{-->
+                            <legend>Logging</legend>
+
+                            <div class="control-group">
+                                <label class="control-label" for="logging_events">Logging Events</label>
+                                <div class="controls">
+                                    <label class="checkbox" for="logging_events_link-status">
+                                        <input type="checkbox" id="logging_events_link-status" name="logging_events" value="link-status" checked="checked" class="global" />
+                                        Link Status
+                                    </label>
+                                    <label class="checkbox" for="logging_events_trunk-status">
+                                        <input type="checkbox" id="logging_events_trunk-status" name="logging_events" value="trunk-status" checked="checked" class="global" />
+                                        Trunk Status
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="logging_sourceinterface">Source Interface</label>
+                                <div class="controls">
+                                    <input type="text" id="logging_sourceinterface" name="logging_sourceinterface" value="" class="global validate not_empty" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="logging_servers">Logging Servers</label>
+                                <div class="controls">
+                                    <select id="logging_servers" name="logging_servers" multiple="multiple" class="global list">
+                                        <!-- No logging servers defined by default -->
+                                    </select>
+                                    <div>
+                                        <button class="btn btn-danger" id="logging_servers_remove">Remove Selected Servers</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="logging_server_new">New Logging Server</label>
+                                <div class="controls">
+                                    <input type="text" id="logging_server_new" placeholder="IP Address"/>
+                                    <div>
+                                        <button class="btn btn-success" id="logging_servers_add">Add Server</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset><!--}}}-->
+
+                        <fieldset><!--{{{-->
+                            <legend>NTP</legend>
+
+                            <div class="control-group">
+                                <label class="control-label" for="ntp_source">NTP Source Interface</label>
+                                <div class="controls">
+                                    <input type="text" id="ntp_source" name="ntp_source" value="" class="global validate not_empty" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="ntp_servers">NTP Servers</label>
+                                <div class="controls">
+                                    <select id="ntp_servers" name="ntp_servers" multiple="multiple" class="global list">
+                                        <!-- No NTP servers defined by default -->
+                                    </select>
+                                    <div>
+                                        <button class="btn btn-danger" id="ntp_servers_remove">Remove Selected Servers</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="control-group">
+                                <label class="control-label" for="ntp_server_new">New NTP Server</label>
+                                <div class="controls">
+                                    <input type="text" id="ntp_server_new" placeholder="IP Address" />
+                                    <div>
+                                        <button class="btn btn-success" id="ntp_servers_add">Add Server</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset><!--}}}-->
+
+                        <fieldset><!--{{{-->
+                            <legend>SNMP</legend>
+
+                        </fieldset><!--}}}-->
+
+                        <fieldset><!--{{{-->
+                            <legend>Banners</legend>
+
+                            <div class="control-group">
+                                <label class="control-label" for="banner_exec">Exec Banner</label>
+                                <div class="controls">
+                                    <textarea id="banner_exec" name="banner_exec" rows="6" cols="45" wrap="off" class="global validate not_empty span4"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="banner_login">Login Banner</label>
+                                <div class="controls">
+                                    <textarea id="banner_login" name="banner_login" rows="6" cols="45" wrap="off" class="global validate not_empty span4"></textarea>
+                                </div>
+                            </div>
+                        </fieldset><!--}}}-->
+
+                        <!-- Macros -->
+
+                        <h2>Line Configuration</h2>
+                        <fieldset class="context_parent"><!--{{{-->
+                            <legend>Console Lines</legend>
+
+                            <input type="hidden" id="line_con_0" name="line" value="con 0" class="global" />
+                            <input type="hidden" id="line_con_0_switch" name="__switch" value="line" class="global" />
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_con_exectimeout">Exec Timeout</label>
+                                <div class="controls">
+                                    <input type="text" id="line_con_exectimeout" name="exectimeout" value="15 0" class="line validate not_empty" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_con_password">Password</label>
+                                <div class="controls">
+                                    <select id="line_con_password" name="password" class="line">
+                                        <option value="7 141A1D05070133">Default</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_con_logging">Logging Mode</label>
+                                <div class="controls">
+                                    <select id="line_con_logging" name="logging" class="line">
+                                        <option value="asynchronous">Asynchronous</option>
+                                        <option value="synchronous" selected="selected">Synchronous</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_con_stopbits">Stop Bits</label>
+                                <div class="controls">
+                                    <input type="text" id="line_con_stopbits" name="stopbits" value="1" maxlength="2" class="line validate not_empty numeric" />
+                                </div>
+                            </div>
+                        </fieldset><!--}}}-->
+
+                        <fieldset class="context_parent"><!--{{{-->
+                            <legend>VTY Lines 0-4</legend>
+
+                            <input type="hidden" id="line_vty04" name="line" value="vty 0 4" class="global" />
+                            <input type="hidden" id="line_vty04_switch" name="__switch" value="line" class="global" />
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_vty04_exectimeout">Exec Timeout</label>
+                                <div class="controls">
+                                    <input type="text" id="line_vty04_exectimeout" name="exectimeout" value="15 0" class="line validate not_empty" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_vty04_password">Password</label>
+                                <div class="controls">
+                                    <select id="line_vty04_password" name="password" class="line">
+                                        <option value="7 104306170E120B">Default</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_vty04_logging">Logging Mode</label>
+                                <div class="controls">
+                                    <select id="line_vty04_logging" name="logging" class="line">
+                                        <option value="asynchronous">Asynchronous</option>
+                                        <option value="synchronous" selected="selected">Synchronous</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_vty04_stopbits">Stop Bits</label>
+                                <div class="controls">
+                                    <input type="text" id="line_vty04_stopbits" name="stopbits" value="1" maxlength="2" class="line validate not_empty numeric" />
+                                </div>
+                            </div>
+                        </fieldset><!--}}}-->
+                            
+                        <fieldset class="context_parent"><!--{{{-->
+                            <legend>VTY Lines 5-15</legend>
+
+                            <input type="hidden" id="line_vty515" name="line" value="vty 5 15" class="global" />
+                            <input type="hidden" id="line_vty515_switch" name="__switch" value="line" class="global" />
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_vty515_exectimeout">Exec Timeout</label>
+                                <div class="controls">
+                                    <input type="text" id="line_vty515_exectimeout" name="exectimeout" value="15 0" class="line validate not_empty" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_vty515_password">Password</label>
+                                <div class="controls">
+                                    <select id="line_vty515_password" name="password" class="line">
+                                        <option value="7 104306170E120B">Default</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_vty515_logging">Logging Mode</label>
+                                <div class="controls">
+                                    <select id="line_vty515_logging" name="logging" class="line">
+                                        <option value="asynchronous">Asynchronous</option>
+                                        <option value="synchronous" selected="selected">Synchronous</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="line_vty515_stopbits">Stop Bits</label>
+                                <div class="controls">
+                                    <input type="text" id="line_vty515_stopbits" name="stopbits" value="1" maxlength="2" class="line validate not_empty numeric" />
+                                </div>
+                            </div>
+                        </fieldset><!--}}}-->
+                            
+                        <!-- Aliases -->
+                        <h2>Aliases</h2>
+                        <fieldset>
+                            <legend>Aliases</legend>
+
+                            <table id="aliases" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Context</th>
+                                        <th>Name</th>
+                                        <th>Command</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="alias_list">
+                                    <!-- No aliases defined by default -->
+                                </tbody>
+                            </table>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Add Alias</legend>
+
+                            <div class="control-group">
+                                <label class="control-label" for="alias_add_context">Context</label>
+                                <div class="controls">
+                                    <select id="alias_add_context">
+                                        <option value="exec">Exec</option>
+                                        <option value="interface" selected="selected">Interface</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="alias_add_name">Name</label>
+                                <div class="controls">
+                                    <input type="text" id="alias_add_name" placeholder="Name"/>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="alias_add_command">Command</label>
+                                <div class="controls">
+                                    <input type="text" id="alias_add_command" placeholder="Command" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button class="btn btn-success" id="alias_add">Add Alias</button>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <h2>VLAN Configuration</h2>
+                        <fieldset id="vlan_fields"><!--{{{-->
+                            <legend for="vlan_fields">VLANs</legend>
+
+                            <table id="vlans" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Vlan</th>
+                                        <th>Description</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vlans_list">
+                                    <!-- No VLANs defined by default -->
+                                </tbody>
+                            </table>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Add VLAN</legend>
+
+                            <div class="control-group">
+                                <label class="control-label">VLAN</label>
+                                <div class="controls">
+                                    <input type="text" id="add_vlan_id" name="add_vlan_id" value="" maxlength="4" class="numeric" placeholder="VLAN ID" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="add_vlan_description">Description</label>
+                                <div class="controls">
+                                    <input type="text" id="add_vlan_description" name="description" value="" maxlength="32" class="alphanumeric" placeholder="Description" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button class="btn btn-success" id="add_vlan_add" name="add_vlan_add">Add VLAN</button>
+                                </div>
+                            </div>
+
+                        </fieldset><!--}}}-->
+
+
+                        <h2>Interface Configuration</h2>
+                        <fieldset>
+                            <legend>Interfaces</legend>
+
+                            <table id="interfaces" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Interface</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Parameters</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="interfaces_list">
+                                </tbody>
+                            </table>
+                        </fieldset>
+
+                        <fieldset><!--{{{-->
+                            <legend>Add Interfaces</legend>
+
+                            <div class="control-group">
+                                <label class="control-label" for="interface_add_type">Interface Type</label>
+                                <div class="controls">
+                                    <select id="interface_add_type" name="interface_add_type">
+                                        <option value="Ethernet">Ethernet</option>
+                                        <option value="FastEthernet">FastEthernet</option>
+                                        <option value="GigabitEthernet" selected="selected">GigabitEthernet</option>
+                                        <option value="TenGigabitEthernet">TenGigabitEthernet</option>
+                                        <option value="PortChannel">PortChannel</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="interface_add_slot">Slot</label>
+                                <div class="controls">
+                                    <input type="text" id="interface_add_slot" name="interface_add_slot" maxlength="2" value="1" class="validate not_empty numeric" />
+                                    <label class="checkbox" for="interface_add_use_slot">
+                                        <input type="checkbox" id="interface_add_use_slot" value="1" checked="checked">
+                                        Use subslot
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="interface_add_subslot">Subslot</label>
+                                <div class="controls">
+                                    <input type="text" id="interface_add_subslot" name="interface_add_subslot" maxlength="2" value="0" class="validate not_empty numeric" />
+                                    <label class="checkbox" for="interface_add_use_subslot">
+                                        <input type="checkbox" id="interface_add_use_subslot" value="1" checked="checked">
+                                        Use subslot
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="interface_add_start">Start</label>
+                                <div class="controls">
+                                    <input type="text" id="interface_add_start" name="interface_add_start" maxlength="2" value="1" class="validate not_empty numeric" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="interface_add_count">Count</label>
+                                <div class="controls">
+                                    <input type="text" id="interface_add_count" name="interface_add_count" maxlength="2" value="24" class="validate not_empty numeric" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button class="btn btn-success" id="interface_add" name="interface_add">Add Interfaces</button>
+                                </div>
+                            </div>
+
+                        </fieldset>
+
+
+                        <h2>SVI Configuration</h2>
+                        <fieldset><!--{{{-->
+                            <legend>SVIs</legend>
+     
+                            <table class="table"><!--{{{-->
+                                <thead>
+                                    <tr>
+                                        <th>Interface</th>
+                                        <th>Description</th>
+                                        <th>Enable IP?</th>
+                                        <th>Address</th>
+                                        <th>Subnet Mask</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="svis_list">
+                                </tbody>
+                            </table><!--}}}-->
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Add SVI</legend>
+
+                            <div class="control-group">
+                                <label for="add_svi_interface">VLAN</label>
+                                <div class="controls">
+                                    <input type="text" id="add_svi_interface" name="interface" value="" placeholder="VLAN ID" maxlength="8" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="add_svi_description">Description</label>
+                                <div class="controls">
+                                    <input type="text" id="add_svi_description" name="description" value="" maxlength="32" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="add_svi_enable">Enable IP?</label>
+                                <div class="controls">
+                                    <input type="checkbox" id="add_svi_enable" name="enable" checked="checked" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="add_svi_address">Address</label>
+                                <div class="controls">
+                                    <input type="text" id="add_svi_address" name="address" value="" maxlength="15" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="add_svi_mask">Mask</label>
+                                <div class="controls">
+                                    <input type="text" id="add_svi_mask" name="mask" value="255.255.255.0" maxlength="15" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button class="btn btn-success" id="add_svi_add" name="add_svi_add">Add SVI</button>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                    </form>
+                </div><!-- span6 -->
+                <div class="span6" id="script_container"><!--{{{-->
+                    <form id="script_form">
+                        <fieldset id="generated_config_fields">
+                            <legend for="generated_config_fields">Generated Configuration</legend>
+                            <div class="control-group">
+                                <textarea class="span6" wrap="off" id="generated_config"></textarea>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div><!-- /span6 --><!--}}}-->
+            </div><!-- row -->
+            <div class="row">
+                <div class="span12">
+                    <footer>
+                        <p>
+                            Powered by 
+                            <a href="https://github.com/optiz0r/scgen/" title="SCGen">SCGen</a>
+                            <a href="https://github.com/optiz0r/scgen/tree/1.0" title="SCGen 1.0">1.0</a>
+                            and <a href="https://github.com/optiz0r/sihnon-js-lib/" title="Sihnon JS Library">Sihnon JS Lib</a>
+                            written by <a xmlns:cc="http://creativecommons.org/ns#" href="http://benroberts.net" property="cc:attributionName" rel="cc:attributionURL">Ben Roberts</a>.
+                            <br />
+                            This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.
+                            <br />
+                            <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+                                <img alt="Creative Commons Licence" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" />
+                            </a>
+                        </p>                
+                    </footer>
+                </div>
+            </div>
+        <div id="template_container">
+            <div id="ispNone">
+                <p><em>none</em></p>
+            </div>
+            <div id="ispPortChannelGroup">
+                <div class="control-group">
+                    <label class="control-label" for="interface_portid_channelgroup_group">Channel Group</label>
+                    <div class="controls">
+                        <input type="text" id="interface_portid_channelgroup_group" name="channelgroup" value="" maxlength="2" class="config span1" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="interface_portid_channelgroup_mode">Mode</label>
+                    <div class="controls">
+                        <select id="interface_portid_channelgroup_mode" name="channelgroup" class="config span2">
+                            <option value="active">Active</option>
+                            <option value="on">On</option>
+                            <option value="auto">Auto</option>
+                            <option value="desirable" selected="selected">Desirable</option>
+                            <option value="passive">Passive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="ispSwitchportAccessVLAN">
+                <div class="control-group">
+                    <label class="control-label" for="interface_portid_switchport_access_vlan">Access VLAN</label>
+                    <div class="controls">
+                        <input type="text" id="interface_portid_switchport_access_vlan" name="switchport_access_vlan" value="" maxlength="4" placeholder="VLAN ID" class="config add_validate not_empty add_numeric span2" />
+                    </div>
+                </div>
+            </div>
+            <div id="ispSwitchportVoiceVLAN">
+                <div class="control-group">
+                    <label class="control-label" for="interface_portid_switchport_voice_vlan">Voice VLAN</label>
+                    <div class="controls">
+                        <input type="text" id="interface_portid_switchport_voice_vlan" name="switchport_voice_vlan" value="" maxlength="4" placeholder="VLAN ID" class="config add_validate not_empty add_numeric span2" />
+                    </div>
+                </div>
+            </div>
+            <div id="ispSpeedDuplex">
+                <div class="control-group">
+                    <label class="control-label" for="interface_portid_speed">Speed</label>
+                    <div class="controls">
+                        <select id="interface_portid_speed" name="speed" class="config span2">
+                            <option value="10">10 MBPS</option>
+                            <option value="100">100 MBPS</option>
+                            <option value="1000" selected="selected">1000 MBPS</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="interface_portid_duplex">Duplex</label>
+                    <div class="controls">
+                        <select id="interface_portid_duplex" name="duplex" class="config span2">
+                            <option value="half">Half</option>
+                            <option value="full" selected="selected">Full</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="ispSwitchportTrunk">
+                <div class="control-group">
+                    <label class="control-label" for="interface_portid_switchport_trunk_native_vlan">Trunk Native VLAN</label>
+                    <div class="controls">
+                        <input type="text" id="interface_portid_switchport_trunk_native_vlan" name="switchport_trunk_native_vlan" value="" maxlength="4" placeholder="VLAN ID" class="config add_validate not_empty add_numeric span2" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="interface_portid_switchport_trunk_allowed_vlan">Trunk Allowed Vlans</label>
+                    <div class="controls">
+                        <input type="text" id="interface_portid_switchport_trunk_allowed_vlan" name="switchport_trunk_allowed_vlan" value="" placeholder="VLAN List" class="config add_validate not_empty add_numeric_list span3" />
+                    </div>
+                </div>
+            </div>
+            <div id="ispPrivateVLAN">
+                <div class="control-group">
+                    <label class="control-label" for="interface_portid_switchport_private-vlan_host-association_parent">Private VLAN Host-association (parent)</label>
+                    <div class="controls">
+                        <input type="text" id="interface_portid_switchport_private-vlan_host-association_parent" name="switchport_privatevlan_hostassociation" value="" maxlength="4" placeholder="VLAN ID" class="config add_validate not_empty add_numeric span2" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="interface_portid_switchport_private-vlan_host-association_children">Private VLAN Host-association (children)</label>
+                    <div class="controls">
+                        <input type="text" id="interface_portid_switchport_private-vlan_host-association_children" name="switchport_privatevlan_hostassociation" value="" placeholder="VLAN List" class="config add_validate not_empty add_numeric_list span3" />
+                    </div>
+                </div>
+            </div>
+            <div id="alias_template">
+                <table id="alias_template_table">
+                    <tbody id="alias_template_body">
+                        <tr class="context_parent">
+                            <td>
+                                <input type="text" id="alias_aliasid_context" name="context" readonly="readonly" />
+                            </td>
+                            <td>
+                                <input type="text" id="alias_aliasid_name" name="name" readonly="readonly" />
+                            </td>
+                            <td>
+                                <input type="text" id="alias_aliasid_command" name="command" readonly="readonly" />
+                            </td>
+                            <td>
+                                <input type="hidden" id="alias_aliasid" name="alias" class="add_global add_generate" />
+                                <button id="alias_aliasid_remove" class="btn btn-danger remove-ui">Remove</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div><!-- /alias_template -->
+            <div id="vlan_template">
+                <table id="vlan_template_table"><!--{{{-->
+                    <tbody id="vlan_template_body">
+                        <tr class="context_parent">
+                            <td>
+                                vlanid
+                                <input type="hidden" id="vlan_vlanid_name" name="vlan" value="vlanid" class="add_global" />
+                                <input type="hidden" id="vlan_vlanid_switch" name="__switch" value="vlan" class="add_global" />
+                            </td>
+                            <td>
+                                <input type="text" id="vlan_vlanid_description" name="description" maxlength="32" value="" class="add_vlan add_generate add_validate not_empty" />
+                            </td>
+                            <td>
+                                <button class="btn btn-danger remove-ui" id="vlan_vlanid_remove" name="remove">Remove</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table><!--}}}-->
+            </div><!-- /vlan_template -->
+            <div id="interface_template">
+                <table id="interface_template_table"><!--{{{-->
+                    <tbody id="interface_template_body">
+                        <tr class="context_parent">
+                            <td>
+                                <input type="hidden" id="interface_portid_id" name="interface_id" value="portid" />
+                                <input type="hidden" id="interface_portid_name" name="interface" value="portname" class="add_global" />
+                                <input type="hidden" id="interface_portid_switch" name="__switch" value="interface" class="add_global" />
+                                portname
+                            </td>
+                            <td>
+                                <select id="interface_portid_type" name="type" class="add_standards">
+                                    <!-- Autogenerated from configuration file -->
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" id="interface_portid_description" name="description" value="Not in use" placeholder="Description" class="add_interface add_generate add_validate not_empty" />
+                            </td>
+                            <td class="parameters">
+                                <p><em>none</em></p>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger remove-ui" id="interface_portid_remove" name="remove">Remove</button
+                            </td>
+                        </tr>
+                    </tbody>
+                </table><!--}}}-->
+            </div><!-- /interface_template -->
+            <div id="svi_template">
+                <table id="svi_template_table"><!--{{{-->
+                    <tbody id="svi_template_body">
+                        <tr class="context_parent">
+                            <td>
+                                <input type="hidden" id="interface_sviid_name" name="interface" value="sviid" class="add_global" />
+                                <input type="hidden" id="interface_sviid_switch" name="__switch" value="svi" class="add_global" />
+                                sviid
+                            </td>
+                            <td>
+                                <div class="control-group">
+                                    <input type="text" id="interface_sviid_description" name="description" maxlength="32" value="" class="add_svi add_generate add_validate not_empty" />
+                                    </div.
+                            </td>
+                            <td>
+                                <input type="checkbox" id="interface_sviid_enable_ip" name="ip_address" checked="checked" class="add_svi add_generate toggle_external_values" />
+                            </td>
+                            <td>
+                                <div class="control-group">
+                                    <input type="text" id="interface_sviid_address" name="ip_address" maxlength="15" value="" class="add_generate add_validate not_empty add_ip" />
+                                </div>
+                            </td> 
+                            <td>
+                                <div class="control-group">
+                                    <input type="text" id="interface_sviid_mask" name="ip_address" maxlength="15" value="" class="add_generate add_validate not_empty add_ip" />
+                                </div>
+                            </td> 
+                            <td>
+                                <button class="btn btn-danger remove-ui" id="interface_sviid_remove" name="remove">Remove</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table><!--}}}-->
+            </div><!-- /svi_template -->
+        </div><!-- /template_container -->
+    </body>
+</html>
+
