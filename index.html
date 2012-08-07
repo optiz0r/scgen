@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html ng-app>
     <head>
         <title>Cisco Switch Config Generator</title>
 
@@ -10,10 +10,15 @@
         <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
         <script type="text/javascript" src="bootstrap.min.js"></script>
 
+        <!-- Angular JS //-->
+        <script src="angular-1.0.1.min.js"></script>
+
         <link rel="stylesheet" type="text/css" href="styles.css" />
         <script src="sihnon-framework.js"></script>
         <script src="scripts.js"></script>
+        <script src="ui.js"></script>
         <script src="default-config.js"></script>
+        <script src="controllers.js"></script>
     </head>
     <body>
         <div class="navbar navbar-fixed-top no-print">
@@ -29,9 +34,30 @@
             </div><!-- /container-fliud -->
         </div><!-- /topbar -->
 
-        <div class="container">
+        <div class="container" ng-controller="model_config_controller">
             <div class="row">
                 <div class="span6">
+                    <div class="row">
+                        <h2>Device Type</h2>
+                        <form id="model_selection" class="form-horizontal" ng-controller="model_list_controller">
+                            <fieldset id="model_selection_fields">
+                                <div class="control-group">
+                                    <label class="control-label">Filter</label>
+                                    <div class="controls">
+                                        <input type="text" value="" placeholder="Search:" ng-model="query" class="search-query">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Device Model</label>
+                                    <div class="controls">
+                                        <select id="model_selection_device">
+                                            <option ng-repeat="model in models | filter:query" value="{{model.name}}">{{model.description}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
                     <form id="config_form" class="form-horizontal">
                         <h2>Global Configuration</h2>
                         <fieldset id="general_fields">
