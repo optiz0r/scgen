@@ -1,0 +1,32 @@
+{
+
+    /* Switch Platforms */
+    '3750x': {
+        description: 'Cisco 3750X',
+        template: undefined,
+        config: [
+            /* Services */
+            {
+                ui: newui.config.service,
+                hidden: true,
+                enabled: true, 
+                values: {
+                    name: 'nagle'
+                }
+            },
+            {
+                ui: newui.config.service,
+                hidden: true,
+                enabled: false,
+                values: {
+                    name: 'pad'
+                }
+            },
+            {
+                ui: newui.config.text,
+                hidden: false,
+            }
+        ]
+    },
+    
+}
