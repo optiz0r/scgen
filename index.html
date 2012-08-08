@@ -34,25 +34,23 @@
             </div><!-- /container-fliud -->
         </div><!-- /topbar -->
 
-        <div class="container" ng-controller="model_config_controller">
+        <div class="container" ng-controller="models_controller">
             <div class="row">
                 <div class="span6">
                     <div class="row">
                         <h2>Device Type</h2>
-                        <form id="model_selection" class="form-horizontal" ng-controller="model_list_controller">
+                        <form id="model_selection" class="form-horizontal">
                             <fieldset id="model_selection_fields">
                                 <div class="control-group">
                                     <label class="control-label">Filter</label>
                                     <div class="controls">
-                                        <input type="text" value="" placeholder="Search:" ng-model="query" class="search-query">
+                                        <input type="text" value="" placeholder="Search:" ng-model="query.description" class="search-query">
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">Device Model</label>
                                     <div class="controls">
-                                        <select id="model_selection_device">
-                                            <option ng-repeat="model in models | filter:query" value="{{model.name}}">{{model.description}}</option>
-                                        </select>
+                                        <select id="model_selection_device" ng-model="selected_model" ng-options="model.name as model.description for model in models | filter:query"></select>
                                     </div>
                                 </div>
                             </fieldset>
