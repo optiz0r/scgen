@@ -1,10 +1,5 @@
 *.swp
 *~
-# JQuery/JQueryUI files 
-/development-bundle/
-/js/
-/css/
-/jquery.html
 
-# config file
-default-config.js
+# config files
+/configs/default-config.js
