@@ -1,28 +1,108 @@
 [
-    {
+    { 
         "name": "3750x",
         "description": "Cisco 3750X",
         "config": [
             {
-                "ui": "service",
-                "hidden": true,
-                "enabled": true, 
-                "values": {
-                    "name": "nagle"
-                }
+                "name": "Global Configuration",
+                "ios_context": "global",
+                "sections": [
+                    {
+                        "name": "General",
+                        "groups": [
+                            {
+                                "name": "Services",
+                                "command": "service",
+                                "ui": "checkboxgroup",
+                                "fields": [
+                                    {
+                                        "hidden": false,
+                                        "label": "Nagle",
+                                        "value": "nagle",
+                                        "enabled": false
+                                    },
+                                    { 
+                                        "hidden": false,
+                                        "label": "Pad",
+                                        "value": "pad",
+                                        "enabled": false
+                                    },
+                                    { 
+                                        "hidden": false,
+                                        "label": "TCP keep-alives (in)",
+                                        "value": "tcp-keepalives-in",
+                                        "enabled": false
+                                    },
+                                    { 
+                                        "hidden": false,
+                                        "label": "TCP keep-alives (out)",
+                                        "value": "tcp-keepalives-out",
+                                        "enabled": false
+                                    },
+                                    { 
+                                        "hidden": false,
+                                        "label": "Debug Timestamps",
+                                        "value": "timestamps_debug",
+                                        "enabled": true
+                                    },
+                                    { 
+                                        "hidden": false,
+                                        "label": "Log Timestamps",
+                                        "value": "timestamps_log",
+                                        "enabled": true
+                                    },
+                                    { 
+                                        "hidden": false,
+                                        "label": "Password Encryption",
+                                        "value": "password-encryption",
+                                        "enabled": true
+                                    },
+                                    { 
+                                        "hidden": false,
+                                        "label": "Config Compression",
+                                        "value": "compress-config",
+                                        "enabled": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Hostname",
+                                "command": "hostname",
+                                "ui": "text",
+                                "hidden": false,
+                                "value": "default"
+                            },
+                            {
+                                "name": "Enable Password",
+                                "command": "enable_secret",
+                                "ui": "select",
+                                "hidden": false,
+                                "selected": "5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.",
+                                "values": {
+                                    "5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.": "cisco"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Logging",
+                        "groups": [
+                         ]
+                    }
+                ]
             },
             {
-                "ui": "service",
-                "hidden": true,
-                "enabled": false,
-                "values": {
-                    "name": "pad"
-                }
-            },
-            {
-                "ui": "text",
-                "hidden": false
+                "name": "Line Configuration",
+                "sections": [
+                ]
             }
+        ]
+    },
+    {
+        "name": "dummy",
+        "description": "Dummy",
+        "config": [
+
         ]
     }
 ]

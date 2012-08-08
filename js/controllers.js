@@ -4,7 +4,7 @@ function models_controller($scope, $http) {
 
     $http.get('configs/models.json').success(function(data) {
         $scope.models = data;
-        $scope.selected_model = $scope.models.length > 0 ? $scope.models[0].name : undefined;
+        $scope.selected_model = $scope.models.length > 0 ? $scope.models[0] : undefined;
     });
 
 }

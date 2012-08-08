@@ -50,70 +50,43 @@
                                 <div class="control-group">
                                     <label class="control-label">Device Model</label>
                                     <div class="controls">
-                                        <select id="model_selection_device" ng-model="selected_model" ng-options="model.name as model.description for model in models | filter:query"></select>
+                                        <select id="model_selection_device" ng-model="selected_model" ng-options="model as model.description for model in models | filter:query"></select>
                                     </div>
                                 </div>
                             </fieldset>
                         </form>
                     </div>
                     <form id="config_form" class="form-horizontal">
+                        <div ng-repeat="context in selected_model.config">
+                            <h2>{{context.name}}</h2>
+                            <fieldset ng-repeat="section in context.sections">
+                                <legend>{{section.name}}</legend>
+
+                                <div class="control-group" ng-repeat="group in section.groups">
+                                    <label class="control-label">{{group.name}}</label>
+                                    <div class="controls">
+                                        <ng-switch on="group.ui">
+                                            <div ng-switch-when="checkboxgroup">
+                                                <label for="" class="checkbox" ng-repeat="field in group.fields">
+                                                    <input type="checkbox" id="" name="{{group.command}}" ng-model="field.enabled" value="{{field.value}}" class="global" change="scgen.generate()" />
+                                                    {{field.label}}
+                                                </label>
+                                            </div>
+                                            <div ng-switch-when="text">
+                                                <input type="text" id="" name="{{group.command}}" ng-model="group.value" class="global" />
+                                            </div>
+                                            <div ng-switch-when="select">
+                                                <select name="{{group.command}}" ng-model="group.selected" ng-options="value as label for (value, label) in group.values" class="global"></select>
+                                            </div>
+                                        </ng-switch>
+                                    </div>
+                                </div>
+                            </fieldset>
+                                
+                        </div>
                         <h2>Global Configuration</h2>
                         <fieldset id="general_fields">
                             <legend for="general_fields">Global</legend>
-
-                            <div class="control-group">
-                                <label class="control-label">Services</label>
-                                <div class="controls">
-                                    <label for="service_nagle" class="checkbox">
-                                        <input type="checkbox" id="service_nagle" name="service" value="nagle" class="global"/>
-                                        Nagle
-                                    </label>
-                                    <label for="service_pad" class="checkbox">
-                                        <input type="checkbox" id="service_pad" name="service" value="pad" class="global"/>
-                                        Pad
-                                    </label>
-                                    <label for="service_tcp-keepalives-in" class="checkbox">
-                                        <input type="checkbox" id="service_tcp-keepalives-in" name="service" value="tcp-keepalives-in" class="global"/>
-                                        TCP keep-alives (in)
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" id="service_tcp-keepalives-out" name="service" value="tcp-keepalives-out" class="global"/>
-                                        TCP keep-alives (out)
-                                    </label>
-                                    <label for="service_timestamps_debug" class="checkbox">
-                                        <input type="checkbox" id="service_timestamps_debug" name="service" value="timestamps debug" class="global"/>
-                                        Debug Timestamps
-                                    </label>
-                                    <label for="service_timestamps_log" class="checkbox">
-                                        <input type="checkbox" id="service_timestamps_log" name="service" value="timestamps log" class="global"/>
-                                        Log Timestamps
-                                    </label>
-                                    <label for="service_password-encryption" class="checkbox">
-                                        <input type="checkbox" id="service_password-encryption" name="service" value="password-encryption" class="global"/>
-                                        Password Encryption
-                                    </label>
-                                    <label for="service_compress-config" class="checkbox">
-                                        <input type="checkbox" id="service_compress-config" name="service" value="compress-config" class="global"/>
-                                        Config Compression
-                                    </label>
-                                </div><!-- /controls -->
-                            </div><!-- /control-group -->
-
-                            <div class="control-group">
-                                <label class="control-label" for="hostname">Hostname</label>
-                                <div class="controls">
-                                    <input type="text" id="hostname" name="hostname" value="" class="global validate not_empty" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="enable_secret">Enable Password</label>
-                                <div class="controls">
-                                    <select id="enable_secret" name="enable_secret" class="global">
-                                        <!-- No passwords defined by default -->
-                                    </select>
-                                </div>
-                            </div>
 
                             <div class="control-group">
                                 <label class="control-label" for="storm-control_multicast">Storm Control includes multicast</label>

@@ -97,7 +97,7 @@ var scgen = {
 
     init: function() { /*{{{*/
         // Configure every form field to update the config after it's value changes
-        $(".global, .line, .interface, .vlan, .svi").change(function() {
+        $(".global, .line, .interface, .vlan, .svi").live('change', function() {
             scgen.generate();
         });
 
