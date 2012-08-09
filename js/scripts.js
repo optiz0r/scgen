@@ -177,7 +177,7 @@ var scgen = {
                 // trigger event handlers
                 f.change();
             } else {
-                console.log('Field not recognised: ' + k, f);
+                //console.log('Field not recognised: ' + k, f);
             }
         }
 

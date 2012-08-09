@@ -76,20 +76,53 @@
                             {
                                 "name": "Enable Password",
                                 "command": "enable_secret",
-                                "ui": "select",
+                                "ui": "text",
                                 "hidden": false,
-                                "selected": "5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.",
-                                "values": {
-                                    "5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.": "cisco"
-                                }
+                                "value": "5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix."
                             },
                             {
                                 "name": "Storm control includes multicast",
                                 "command": "stormcontrol_multicast",
                                 "ui": "checkbox",
                                 "hidden": true,
-                                "value": false,
                                 "enabled": false
+                            },
+                            {
+                                "name": "Trap logon failures",
+                                "command": "logon_failure_trap",
+                                "ui": "checkbox",
+                                "hidden": true,
+                                "enabled": true
+                            },
+                            {
+                                "name": "Verify files automatically",
+                                "command": "file_verify_auto",
+                                "ui": "checkbox",
+                                "hidden": true,
+                                "enabled": false
+                            },
+                            {
+                                "name": "System MTU",
+                                "command": "system_mtu",
+                                "ui": "number",
+                                "hidden": false,
+                                "value": 1552,
+                                "validation": {
+                                    "min": 1460,
+                                    "max": 9218,
+                                    "pattern": "mtu"
+                                }
+                            },
+                            {
+                                "name": "Internal VLAN allocation policy",
+                                "command": "vlan_internal_allocation_policy",
+                                "ui": "select",
+                                "hidden": false,
+                                "selected": "descending",
+                                "values": {
+                                    "descending": "Descending",
+                                    "ascending": "Ascending"
+                                }
                             }
                         ]
                     },
@@ -97,14 +130,181 @@
                         "name": "Logging",
                         "hidden": true,
                         "groups": [
+                            {
+                                "name": "Exception Logging",
+                                "command": "logging_exception",
+                                "ui": "number",
+                                "hidden": true,
+                                "value": 16000,
+                                "validation": {
+                                    "min": 0,
+                                    "max": 16000
+                                }
+                            },
+                            {
+                                "name": "Buffered Logging",
+                                "command": "logging_buffered",
+                                "ui": "number",
+                                "hidden": true,
+                                "value": 16384,
+                                "validation": {
+                                    "min": 0,
+                                    "max": 16384
+                                }
+                            },
+                            {
+                                "name": "Console logging",
+                                "command": "logging_console",
+                                "ui": "checkbox",
+                                "hidden": true,
+                                "enabled": true
+                            }
                          ]
+                    },
+                    {
+                        "name": "Clock",
+                        "hidden": true,
+                        "groups": [
+                            {
+                                "name": "Timezone",
+                                "command": "clock_timezone",
+                                "ui": "text",
+                                "hidden": true,
+                                "value": "GMT 0"
+                            },
+                            {
+                                "name": "Daylight Savings Time",
+                                "command": "clock_summertime",
+                                "ui": "text",
+                                "hidden": true,
+                                "value": "BST recurring last Sun Mar 2:00 last Sun Oct 2:00"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "QoS",
+                        "hidden": true,
+                        "groups": [
+                        ]
+                    },
+                    {
+                        "name": "VTP",
+                        "hidden": true,
+                        "groups": [
+                            {
+                                "name": "Mode",
+                                "command": "vtp_mode",
+                                "ui": "text",
+                                "hidden": true,
+                                "value": "transparent"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UDLD",
+                        "hidden": true,
+                        "groups": [
+                            {
+                                "name": "udld",
+                                "command": "udld",
+                                "ui": "text",
+                                "hidden": true,
+                                "value": "aggressive"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "IP Layer",
+                        "hidden": false,
+                        "groups": [
+                            {
+                                "name": "Options",
+                                "command": "ip",
+                                "hidden": true,
+                                "ui": "checkboxgroup",
+                                "fields": [
+                                    {
+                                        "name": "Use subnet zero",
+                                        "hidden": true,
+                                        "value": "subnet zero",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "Allow source routing",
+                                        "hidden": true,
+                                        "value": "source-route",
+                                        "enabled": false
+                                    },
+                                    {
+                                        "name": "Lookup domain names",
+                                        "hidden": true,
+                                        "value": "domain-lookup",
+                                        "enabled": false
+                                    },
+                                    {
+                                        "name": "Enable BOOTP server",
+                                        "hidden": true,
+                                        "value": "bootp server",
+                                        "enabled": false
+                                    },
+                                    {
+                                        "name": "Verify VLAN headers",
+                                        "hidden": true,
+                                        "value": "verify header vlan all",
+                                        "enabled": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Hosts",
+                                "command": "ip_hosts",
+                                "hidden": false,
+                                "ui": "hosts",
+                                "selected": false,
+                                "values": {
+                                    "TerminalServer": "192.168.0.1"
+                                }
+                            }
+                        ]
                     }
+
                 ]
             },
             {
                 "name": "Line Configuration",
                 "hidden": true,
                 "sections": [
+                ]
+            }
+        ]
+    },
+    {
+        "name": "6500-agg",
+        "description": "Cisco C6500 Aggregation Switch",
+        "hidden": false,
+        "config": [
+            {
+                "name": "Global Configuration",
+                "hidden": false,
+                "sections": [
+                    {
+                        "name": "General",
+                        "hidden": false,
+                        "groups": [
+                            {
+                                "name": "power_redundancymode",
+                                "command": "power_redundancymode",
+                                "ui": "select",
+                                "hidden": false,
+                                "selected": "redundant",
+                                "values": {
+                                    "redundant": "Redundant",
+                                    "combined": "Combined"
+                                }
+                            }
+                     
+                        ]
+                    }
                 ]
             }
         ]

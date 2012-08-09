@@ -70,18 +70,52 @@
                                         <ng-switch on="group.ui">
                                             <div ng-switch-when="checkboxgroup">
                                                 <label for="" class="checkbox" ng-repeat="field in group.fields | filter:nothidden">
-                                                    <input type="checkbox" id="" name="{{group.command}}" ng-model="field.enabled" value="{{field.value}}" />
+                                                    <input type="checkbox" id="" name="{{field.command||group.command}}" ng-model="field.enabled" value="{{field.value}}" />
                                                     {{field.label}}
                                                 </label>
                                             </div>
                                             <div ng-switch-when="text">
-                                                <input type="text" id="" name="{{group.command}}" ng-model="group.value" />
+                                                <input type="text" name="{{group.command}}" ng-model="group.value" ng-pattern="validate(group.validation.pattern||'none')"/>
+                                            </div>
+                                            <div ng-switch-when="number">
+                                                <input type="number" name="{{group.command}}" ng-model="group.value" min="{{group.validation.min}}" max="{{group.validation.max}}" ng-pattern="validate(group.validation.pattern||'none')" required/>
                                             </div>
                                             <div ng-switch-when="checkbox">
-                                                <input type="checkbox" id="" name="{{group.command}}" ng-model="group.enabled" value="{{group.value}}" />
+                                                <input type="checkbox" name="{{group.command}}" ng-model="group.enabled" value="{{group.value}}" />
                                             </div>
                                             <div ng-switch-when="select">
                                                 <select name="{{group.command}}" ng-model="group.selected" ng-options="value as label for (value, label) in group.values"></select>
+                                            </div>
+                                            <div ng-switch-when="hosts">
+                                                <table class="table-bordered table-condensed">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Hostname</th>
+                                                            <th>Address</th>
+                                                            <th>Remove</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(host,address) in group.values">
+                                                            <td>{{host}}</td>
+                                                            <td>{{address}}</td>
+                                                            <td>
+                                                                <button class="btn btn-danger" data-host="{{host}}" ng-click="hosts.remove($event, group, host)">
+                                                                    <i class="icon-remove"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="parent">
+                                                    <input type="text" name="host" placeholder="Hostname" ng-model="new_host" />
+                                                    <input type="text" id="address" placeholder="IP Address" ng-model="new_address" />
+                                                    <div>
+                                                        <button class="btn btn-success" ng-click="hosts.add($event, group, new_host, new_address);">
+                                                            <i class="icon-edit"></i> Add/Edit Host
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </ng-switch>
                                     </div>
@@ -90,154 +124,10 @@
                                 
                         </div>
                         <h2>Global Configuration</h2>
-                        <fieldset id="general_fields">
-                            <legend for="general_fields">Global</legend>
 
-                            <div class="control-group">
-                                <label class="control-label" for="logon_failure_trap">Trap Logon Failures</label>
-                                <div class="controls">
-                                    <input type="checkbox" id="logon_failure_trap" name="logon_failure_trap" class="global">
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="file_verify_auto">Verify files automatically</label>
-                                <div class="controls">
-                                    <input type="checkbox" id="file_verify_auto" name="file_verify_auto" class="global">
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="power_redundancy-mode">Power Redundancy Mode</label>
-                                <div class="controls">
-                                    <select id="power_redundancy-mode" name="power_redundancymode" class="global">
-                                        <option value="combined">Combined</option>
-                                        <option value="redundant" selected="selected">Redundant</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="system_mtu">System MTU</label>
-                                <div class="controls">
-                                    <input type="text" id="system_mtu" name="system_mtu" value="1552" maxlength="4" class="global validate not_empty numeric" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="vlan_internal_allocation_policy">Internal Allocation Policy</label>
-                                <div class="controls">
-                                    <select id="vlan_internal_allocation_policy" name="vlan_internal_allocation_policy" class="global">
-                                        <option value="ascending">Ascending</option>
-                                        <option value="descending">Descending</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                        </fieldset>
-
-                        <fieldset id="logging_fields"><!--{{{-->
-                            <legend for="logging_fields">Logging</legend>
-
-                            <div class="control-group">
-                                <label class="control-label" for="logging_exception">Exception Logging</label>
-                                <div class="controls">
-                                    <input type="text" id="logging_exception" name="logging_exception" value="16000" class="global validate not_empty numeric"/>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="logging_buffered">Buffered Logging</label>
-                                <div class="controls">
-                                    <input type="text" id="logging_buffered" name="logging_buffered" value="16384" class="global validate not_empty numeric"/>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="logging_console">Console Logging</label>
-                                <div class="controls">
-                                    <input type="checkbox" id="logging_console" name="logging_console" class="global"/>
-                                </div>
-                            </div>
-                        </fieldset><!--}}}-->
-
-                        <!-- Clock settings -->
-                        <fieldset><!--{{{-->
-                            <legend>Clock</legend>
-
-                            <div class="control-group">
-                                <label class="control-label" for="clock_timezone">Timezone</label>
-                                <div class="controls">
-                                    <input type="text" id="clock_timezone" name="clock_timezone" class="global" value="GMT 0" readonly="readonly" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="clock_summertime">Summer time</label>
-                                <div class="controls">
-                                    <input type="text" id="clock_summertime" name="clock_summertime" class="global" value="BST recurring last Sun Mar 2:00 last Sun Oct 2:00" readonly="readonly" />
-                                </div>
-                            </div>
-                        </fieldset>
- 
-                        <!-- QoS: TODO -->
-                        <fieldset>
-                            <legend>QoS</legend>
-            
-                            <p><em>Not yet supported</em></p>
-                        </fieldset>
-
-                        <!-- VTP -->
-                        <fieldset>
-                            <legend>VTP</legend>
-
-                            <div class="control-group">
-                                <label class="control-label" for="vtp_mode">Mode</label>
-                                <div class="controls">
-                                    <input type="text" id="vtp_mode" name="vtp_mode" class="global" value="transparent" readonly="readonly" />
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <!-- UDLD -->
-                        <fieldset>
-                            <legend>UDLD</legend>
-                            <div class="control-group">
-                                <label class="control-label" for="udld">Mode</label>
-                                <div class="controls">
-                                    <input type="text" id="udld" name="udld" class="global" value="aggressive" readonly="readonly" />
-                                </div>
-                            </div>
-                        </fieldset>
 
                         <fieldset><!--{{{-->
                             <legend>IP Layer</legend>
-
-                            <div class="control-group">
-                                <label class="control-label">Options</label>
-                                <div class="controls">
-                                    <label for="ip_subnet-zero" class="checkbox">
-                                        <input type="checkbox" id="ip_subnet-zero" name="ip" value="subnet zero" class="global" checked="checked" />
-                                        Use Subnet Zero
-                                    </label>
-                                    <label class="checkbox" for="ip_source-route">
-                                        <input type="checkbox" id="ip_source-route" name="ip" value="source-route" class="global" />
-                                        Allow Source Routing
-                                    </label>
-                                    <label class="checkbox" for="ip_domain-lookup">
-                                        <input type="checkbox" id="ip_domain-lookup" name="ip" value="domain-lookup" class="global" />
-                                        Lookup Domain Names
-                                    </label>
-                                    <label class="checkbox" for="ip_bootp_server">
-                                        <input type="checkbox" id="ip_bootp_server" name="ip" value="bootp server" class="global"/>
-                                        Enable Bootp Server
-                                    </label>
-                                    <label class="checkbox" for="ip_verify_header_vlan">
-                                        <input type="checkbox" id="ip_verify_header_vlan" name="ip" value="verify header vlan all" class="global"/>
-                                        Verify Vlan Headers
-                                    </label>
-                                </div>
-                            </div>
 
                             <div class="control-group">
                                 <label class="control-group" for="ip_hosts">Hosts</label>
@@ -859,7 +749,7 @@
                                                         <div ng-repeat="field in group.fields">
                                                             <ng-switch on="group.ui">
                                                                 <div ng-switch-when="checkboxgroup">
-                                                                    {{group.command|ioscommand:context.ios_context:field.value:!field.enabled:group.indent||0}}
+                                                                    {{field.command||group.command|ioscommand:context.ios_context:field.value:!field.enabled:group.indent||0}}
                                                                 </div>
                                                                 <div ng-switch-default>
                                                                     {{group.command|ioscommand:context.ios_context:field.value:false:group.indent||0}}
@@ -872,11 +762,19 @@
                                                             <div ng-switch-when="text">
                                                                 {{group.command|ioscommand:context.ios_context:group.value:false:group.indent||0}}
                                                             </div>
+                                                            <div ng-switch-when="number">
+                                                                {{group.command|ioscommand:context.ios_context:group.value:false:group.indent||0}}
+                                                            </div>
                                                             <div ng-switch-when="checkbox">
-                                                                {{group.command|ioscommand:context.ios_context:group.value:group.enabled:group.indent||0}}
+                                                                {{group.command|ioscommand:context.ios_context:group.value:!group.enabled:group.indent||0}}
                                                             </div>
                                                             <div ng-switch-when="select">
-                                                                {{group.command|ioscommand:context.ios_context:group.selected:indent||0}}
+                                                                {{group.command|ioscommand:context.ios_context:group.selected:group.indent||0}}
+                                                            </div>
+                                                            <div ng-switch-when="hosts">
+                                                                <div ng-repeat="(host, address) in group.values">
+                                                                    {{group.command|ioscommand:context.ios_context:host+' '+address:group.indent||0}}
+                                                                </div>
                                                             </div>
                                                         </ng-switch>
                                                     </div>
