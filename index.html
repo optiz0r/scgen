@@ -96,23 +96,57 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr ng-repeat="(host,address) in group.values">
+                                                        <tr ng-repeat="(host,address) in group.values | orderBy:host">
                                                             <td>{{host}}</td>
                                                             <td>{{address}}</td>
                                                             <td>
                                                                 <button class="btn btn-danger" data-host="{{host}}" ng-click="hosts.remove($event, group, host)">
-                                                                    <i class="icon-remove"></i>
+                                                                    <i class="icon-remove icon-white"></i>
                                                                 </button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                                 <div class="parent">
-                                                    <input type="text" name="host" placeholder="Hostname" ng-model="new_host" />
-                                                    <input type="text" id="address" placeholder="IP Address" ng-model="new_address" />
+                                                    <input type="text" placeholder="New Hostname" ng-model="new_host" />
+                                                    <input type="text" placeholder="New IP Address" ng-model="new_address" ng-pattern="validation.ip" />
                                                     <div>
                                                         <button class="btn btn-success" ng-click="hosts.add($event, group, new_host, new_address);">
-                                                            <i class="icon-edit"></i> Add/Edit Host
+                                                            <i class="icon-edit icon-white"></i> Add/Edit Host
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div ng-switch-when="routes">
+                                                <table class="table-bordered table-condensed">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Address</th>
+                                                            <th>Mask</th>
+                                                            <th>Gateway</th>
+                                                            <th>Remove</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="route in group.values | orderBy:'subnet'">
+                                                            <td>{{route.subnet}}</td>
+                                                            <td>{{route.mask}}</td>
+                                                            <td>{{route.gateway}}</td>
+                                                            <td>
+                                                                <button class="btn btn-danger" data-host="{{host}}" ng-click="routes.remove($event, group, $index)">
+                                                                    <i class="icon-remove icon-white"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="parent">
+                                                    <input type="text" placeholder="New Subnet" ng-model="new_subnet" ng-pattern="validation.ip" />
+                                                    <input type="text" placeholder="New Mask" ng-model="new_mask" ng-pattern="validation.ip" />
+                                                    <input type="text" placeholder="New Gateway" ng-model="new_gateway" ng-pattern="validation.ip" />
+                                                    <div>
+                                                        <button class="btn btn-success" ng-click="routes.add($event, group, new_subnet, new_mask, new_gateway);">
+                                                            <i class="icon-edit icon-white"></i> Add Route
                                                         </button>
                                                     </div>
                                                 </div>
@@ -124,57 +158,6 @@
                                 
                         </div>
                         <h2>Global Configuration</h2>
-
-
-                        <fieldset><!--{{{-->
-                            <legend>IP Layer</legend>
-
-                            <div class="control-group">
-                                <label class="control-group" for="ip_hosts">Hosts</label>
-                                <div class="controls">
-                                    <select id="ip_hosts" name="ip_hosts" multiple="multiple" class="global list">
-                                        <!-- No hosts entries by default -->
-                                    </select>
-                                    <div>
-                                        <button class="btn btn-danger" id="ip_hosts_remove">Remove Selected Hosts</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Add Host</label>
-                                <div class="controls">
-                                    <input type="text" id="ip_hosts_new_name" placeholder="Hostname" />
-                                    <input type="text" id="ip_hosts_new_ip" placeholder="IP Address" />
-                                    <div>
-                                        <button class="btn btn-success" id="ip_hosts_add">Add Host</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="ip_routes">Routes</label>
-                                <div class="controls">
-                                    <select id="ip_routes" name="ip_routes" multiple="multiple" class="global list">
-                                        <!-- No routes definedd by default -->
-                                    </select>
-                                    <div>
-                                        <button class="btn btn-danger" id="ip_routes_remove"/>Remove Selected Routes</button>
-                                    </div>
-                                </div>
-                             </div>
-                             <div class="control-group">
-                                 <label class="control-label">Add Route</label>
-                                 <div class="controls">
-                                    <input type="text" id="ip_routes_new_network" placeholder="Network Address" />
-                                    <input type="text" id="ip_routes_new_subnet" placeholder="Subnet Mask" />
-                                    <input type="text" id="ip_routes_new_gateway" placeholder="Gateway Address" />
-                                    <div>
-                                        <button class="btn btn-success" id="ip_routes_add">Add Route</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </fieldset><!--}}}-->
 
 
                         <fieldset><!--{{{-->
@@ -772,8 +755,13 @@
                                                                 {{group.command|ioscommand:context.ios_context:group.selected:group.indent||0}}
                                                             </div>
                                                             <div ng-switch-when="hosts">
-                                                                <div ng-repeat="(host, address) in group.values">
-                                                                    {{group.command|ioscommand:context.ios_context:host+' '+address:group.indent||0}}
+                                                                <div ng-repeat="(host, address) in group.values | orderBy:'host'">
+                                                                    {{group.command|ioscommand:context.ios_context:hosts.command(host, address):group.indent||0}}
+                                                                </div>
+                                                            </div>
+                                                            <div ng-switch-when="routes">
+                                                                <div ng-repeat="route in group.values | orderBy:'subnet'">
+                                                                    {{group.command|ioscommand:context.ios_context:routes.command(route.subnet, route.mask, route.gateway):group.indent||0}}
                                                                 </div>
                                                             </div>
                                                         </ng-switch>

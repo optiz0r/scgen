@@ -3,50 +3,6 @@
  *
  * Generate hashtype 5 passwords using 'openssl passwd -1 -salt pdQG -table foo'
  */
-var models = {
-
-    /* Switch Platforms */
-    '3750x': {
-        description: 'Cisco 3750X',
-        template: undefined,
-        config: [
-            /* Services */
-            {
-                ui: ui.config.service,
-                hidden: true,
-                enabled: true, 
-                values: {
-                    name: 'nagle'
-                }
-            },
-            {
-                ui: ui.config.service,
-                hidden: true,
-                enabled: false,
-                values: {
-                    name: 'pad'
-                }
-            },
-            {
-                ui: ui.config.text,
-                hidden: false,
-        ]
-    },
-    
-    /* Device Models */
-    '3750x-24': {
-        description: 'Cisco 3750X 24 Port',
-        template: models['3750x']
-    },
-
-    /* Device Roles */
-    '3750x-24t-access': {
-        description: 'Cisco 3750X 24 Port Access',
-        template: models['3750x-24']
-    }
-
-}
-
 var switch_config = {
 
     global: {

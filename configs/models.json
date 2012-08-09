@@ -260,10 +260,21 @@
                                 "command": "ip_hosts",
                                 "hidden": false,
                                 "ui": "hosts",
-                                "selected": false,
                                 "values": {
-                                    "TerminalServer": "192.168.0.1"
+                                    "TerminalServer": "192.168.0.1",
+                                    "AnotherTS": "192.168.0.2"
                                 }
+                            },
+                            {
+                                "name": "Routes",
+                                "command": "ip_routes",
+                                "hidden": false,
+                                "ui": "routes",
+                                "values": [
+                                    {"subnet": "10.0.0.0", "mask": "255.0.0.0", "gateway": "192.168.0.1"},
+                                    {"subnet": "172.17.0.0", "mask": "255.255.0.0", "gateway": "192.168.0.2"},
+                                    {"subnet": "172.16.0.0", "mask": "255.255.0.0", "gateway": "192.168.0.2"}
+                                ]
                             }
                         ]
                     }
