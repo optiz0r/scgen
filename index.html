@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html ng-app>
+<html ng-app="scgen">
     <head>
         <title>Cisco Switch Config Generator</title>
 
@@ -18,7 +18,9 @@
         <script src="js/scripts.js"></script>
         <script src="js/ui.js"></script>
         <script src="configs/default-config.js"></script>
+        <script src="js/filters.js"></script>
         <script src="js/controllers.js"></script>
+        <script src="js/app.js"></script>
     </head>
     <body>
         <div class="navbar navbar-fixed-top no-print">
@@ -68,7 +70,7 @@
                                         <ng-switch on="group.ui">
                                             <div ng-switch-when="checkboxgroup">
                                                 <label for="" class="checkbox" ng-repeat="field in group.fields">
-                                                    <input type="checkbox" id="" name="{{group.command}}" ng-model="field.enabled" value="{{field.value}}" class="global" change="scgen.generate()" />
+                                                    <input type="checkbox" id="" name="{{group.command}}" ng-model="field.enabled" value="{{field.values.checkbox}}" class="global" change="scgen.generate()" />
                                                     {{field.label}}
                                                 </label>
                                             </div>
@@ -852,6 +854,38 @@
                         <fieldset id="generated_config_fields">
                             <legend for="generated_config_fields">Generated Configuration</legend>
                             <div class="control-group">
+                                <code>
+                                    <div ng-repeat="context in selected_model.config">
+                                        <div ng-repeat="section in context.sections">
+                                            <div ng-repeat="group in section.groups">
+                                                <ng-switch on="group.fields">
+                                                    <div ng-switch-default>
+                                                        <div ng-repeat="field in group.fields">
+                                                            <ng-switch on="group.ui">
+                                                                <div ng-switch-when="checkboxgroup">
+                                                                    {{group.command|ioscommand:context.ios_context:field.value:!field.enabled:group.indent||0}}
+                                                                </div>
+                                                                <div ng-switch-default>
+                                                                    {{group.command|ioscommand:context.ios_context:field.value:false:group.indent||0}}
+                                                                </div>
+                                                            </ng-switch> 
+                                                        </div>
+                                                    </div>
+                                                    <div ng-switch-when="undefined">
+                                                        <ng-switch on="group.ui">
+                                                            <div ng-switch-when="text">
+                                                                {{group.command|ioscommand:context.ios_context:group.value:false:group.indent||0}}
+                                                            </div>
+                                                            <div ng-switch-when="select">
+                                                                {{group.command|ioscommand:context.ios_context:group.selected:indent||0}}
+                                                            </div>
+                                                        </ng-switch>
+                                                    </div>
+                                                </ng-switch>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </code>
                                 <textarea class="span6" wrap="off" id="generated_config"></textarea>
                             </div>
                         </fieldset>

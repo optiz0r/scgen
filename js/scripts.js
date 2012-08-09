@@ -11,7 +11,7 @@ var scgen = {
         }, /*}}}*/
         global: { /*{{{*/
             hostname:                   [ "hostname", "%1" ],
-            service:                    [ "service", "%1" ],
+            service:                    [ "service", "%name" ],
             logging_exception:          [ "logging exception", "%1" ],
             logging_buffered:           [ "logging buffered", "%1", "debugging" ],
             logging_console:            [ "logging console critical" ],
@@ -389,20 +389,29 @@ var scgen = {
         var new_command = '';
 
         for (var addition in additions) {
-            if (matches = additions[addition].match(/^%(\d)(-)?$/)) {
-                var parameter_num = matches[1];
+            if (matches = additions[addition].match(/^%(\d+|[a-zA-Z_]+)(-)?$/)) {
+                var parameter_name = matches[1];
                 var parameter_negate_exclude = (matches[2] == '-')
-                if (parameters.length >= parameter_num) {
-                    if (negate && parameter_negate_exclude) {
-                        // Exclude this parameter from the negated version
+
+                if (parameter_name.match(/^\d+$/)) {
+                    --parameter_name;
+                }
+
+                if ($.isArray(parameters)) {
+                    if (parameters.length >= parameter_name) {
+                        if ( ! (negate && parameter_negate_exclude)) {
+                            new_command += parameters[parameter_name] + ' ';
+                        }
                     } else {
-                        new_command += parameters[parameter_num - 1] + ' ';
+                        if ( ! negate) {
+                            console.log("Missing parameter " + parameter_name + " for command " + command);
+                        }
                     }
                 } else {
-                    if (!negate) {
-                        // Log the missing parameter as a warning
-                        console.log("Missing parameter " + parameter_num + " for command " + command);
-                    } else {
+                    if ( ! (negate && parameter_negate_exclude)) {
+                        new_command += parameters + ' ';
+                        console.log(new_command);
+                        break; // Only one addition can be substituted
                     }
                 }
             } else {
