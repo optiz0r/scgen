@@ -59,26 +59,29 @@
                         </form>
                     </div>
                     <form id="config_form" class="form-horizontal">
-                        <div ng-repeat="context in selected_model.config">
+                        <div ng-repeat="context in selected_model.config | filter:nothidden">
                             <h2>{{context.name}}</h2>
-                            <fieldset ng-repeat="section in context.sections">
+                            <fieldset ng-repeat="section in context.sections | filter:nothidden">
                                 <legend>{{section.name}}</legend>
 
-                                <div class="control-group" ng-repeat="group in section.groups">
+                                <div class="control-group" ng-repeat="group in section.groups | filter:nothidden">
                                     <label class="control-label">{{group.name}}</label>
                                     <div class="controls">
                                         <ng-switch on="group.ui">
                                             <div ng-switch-when="checkboxgroup">
-                                                <label for="" class="checkbox" ng-repeat="field in group.fields">
-                                                    <input type="checkbox" id="" name="{{group.command}}" ng-model="field.enabled" value="{{field.values.checkbox}}" class="global" change="scgen.generate()" />
+                                                <label for="" class="checkbox" ng-repeat="field in group.fields | filter:nothidden">
+                                                    <input type="checkbox" id="" name="{{group.command}}" ng-model="field.enabled" value="{{field.value}}" />
                                                     {{field.label}}
                                                 </label>
                                             </div>
                                             <div ng-switch-when="text">
-                                                <input type="text" id="" name="{{group.command}}" ng-model="group.value" class="global" />
+                                                <input type="text" id="" name="{{group.command}}" ng-model="group.value" />
+                                            </div>
+                                            <div ng-switch-when="checkbox">
+                                                <input type="checkbox" id="" name="{{group.command}}" ng-model="group.enabled" value="{{group.value}}" />
                                             </div>
                                             <div ng-switch-when="select">
-                                                <select name="{{group.command}}" ng-model="group.selected" ng-options="value as label for (value, label) in group.values" class="global"></select>
+                                                <select name="{{group.command}}" ng-model="group.selected" ng-options="value as label for (value, label) in group.values"></select>
                                             </div>
                                         </ng-switch>
                                     </div>
@@ -89,13 +92,6 @@
                         <h2>Global Configuration</h2>
                         <fieldset id="general_fields">
                             <legend for="general_fields">Global</legend>
-
-                            <div class="control-group">
-                                <label class="control-label" for="storm-control_multicast">Storm Control includes multicast</label>
-                                <div class="controls">
-                                    <input type="checkbox" id="storm-control_multicast" name="stormcontrol_multicast" class="global" />
-                                </div>
-                            </div>
 
                             <div class="control-group">
                                 <label class="control-label" for="logon_failure_trap">Trap Logon Failures</label>
@@ -875,6 +871,9 @@
                                                         <ng-switch on="group.ui">
                                                             <div ng-switch-when="text">
                                                                 {{group.command|ioscommand:context.ios_context:group.value:false:group.indent||0}}
+                                                            </div>
+                                                            <div ng-switch-when="checkbox">
+                                                                {{group.command|ioscommand:context.ios_context:group.value:group.enabled:group.indent||0}}
                                                             </div>
                                                             <div ng-switch-when="select">
                                                                 {{group.command|ioscommand:context.ios_context:group.selected:indent||0}}

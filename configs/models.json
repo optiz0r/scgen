@@ -12,53 +12,54 @@
                         "groups": [
                             {
                                 "name": "Services",
+                                "hidden": true,
                                 "command": "service",
                                 "ui": "checkboxgroup",
                                 "fields": [
                                     {
-                                        "hidden": false,
+                                        "hidden": true,
                                         "label": "Nagle",
                                         "value": "nagle",
                                         "enabled": false
                                     },
                                     { 
-                                        "hidden": false,
+                                        "hidden": true,
                                         "label": "Pad",
                                         "value": "pad",
                                         "enabled": false
                                     },
                                     { 
-                                        "hidden": false,
+                                        "hidden": true,
                                         "label": "TCP keep-alives (in)",
                                         "value": "tcp-keepalives-in",
                                         "enabled": false
                                     },
                                     { 
-                                        "hidden": false,
+                                        "hidden": true,
                                         "label": "TCP keep-alives (out)",
                                         "value": "tcp-keepalives-out",
                                         "enabled": false
                                     },
                                     { 
-                                        "hidden": false,
+                                        "hidden": true,
                                         "label": "Debug Timestamps",
                                         "value": "timestamps_debug",
                                         "enabled": true
                                     },
                                     { 
-                                        "hidden": false,
+                                        "hidden": true,
                                         "label": "Log Timestamps",
                                         "value": "timestamps_log",
                                         "enabled": true
                                     },
                                     { 
-                                        "hidden": false,
+                                        "hidden": true,
                                         "label": "Password Encryption",
                                         "value": "password-encryption",
                                         "enabled": true
                                     },
                                     { 
-                                        "hidden": false,
+                                        "hidden": true,
                                         "label": "Config Compression",
                                         "value": "compress-config",
                                         "enabled": false
@@ -81,11 +82,20 @@
                                 "values": {
                                     "5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix.": "cisco"
                                 }
+                            },
+                            {
+                                "name": "Storm control includes multicast",
+                                "command": "stormcontrol_multicast",
+                                "ui": "checkbox",
+                                "hidden": true,
+                                "value": false,
+                                "enabled": false
                             }
                         ]
                     },
                     {
                         "name": "Logging",
+                        "hidden": true,
                         "groups": [
                          ]
                     }
@@ -93,6 +103,7 @@
             },
             {
                 "name": "Line Configuration",
+                "hidden": true,
                 "sections": [
                 ]
             }

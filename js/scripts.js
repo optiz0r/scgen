@@ -410,7 +410,6 @@ var scgen = {
                 } else {
                     if ( ! (negate && parameter_negate_exclude)) {
                         new_command += parameters + ' ';
-                        console.log(new_command);
                         break; // Only one addition can be substituted
                     }
                 }
