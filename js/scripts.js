@@ -42,6 +42,7 @@ var scgen = {
             logging_events:             [ "logging event", "%1" ],
             logging_sourceinterface:    [ "logging source-interface", "%1" ],
             logging_servers:            [ "logging", "%1" ],
+            banner:                     [ "banner", "%name", "%contents-" ], 
             banner_exec:                [ "banner exec", "%1" ],
             banner_login:               [ "banner login", "%1" ],
             line:                       [ "line", "%1" ],
@@ -407,6 +408,11 @@ var scgen = {
                             console.log("Missing parameter " + parameter_name + " for command " + command);
                         }
                     }
+                } else if (Object.prototype.toString.call(parameters) === '[object Object]') {
+                    if ( ! (negate && parameter_negate_exclude)) {
+                        new_command += parameters[parameter_name] + ' ';
+                    }
+
                 } else {
                     if ( ! (negate && parameter_negate_exclude)) {
                         new_command += parameters + ' ';

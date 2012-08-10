@@ -1,6 +1,6 @@
 [
     { 
-        "name": "3750x",
+        "name": "3750x Datacentre Access Switch",
         "description": "Cisco 3750X",
         "config": [
             {
@@ -128,7 +128,7 @@
                     },
                     {
                         "name": "Logging",
-                        "hidden": true,
+                        "hidden": false,
                         "groups": [
                             {
                                 "name": "Exception Logging",
@@ -158,6 +158,42 @@
                                 "ui": "checkbox",
                                 "hidden": true,
                                 "enabled": true
+                            },
+                            {
+                                "name": "Log Events",
+                                "command": "logging_events",
+                                "ui": "checkboxgroup",
+                                "hidden": true,
+                                "fields": [
+                                    {
+                                        "label": "Link Status",
+                                        "hidden": true,
+                                        "value": "link-status",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "label": "Trunk Status",
+                                        "hidden": true,
+                                        "value": "trunk-status",
+                                        "enabled": true
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Source Interface",
+                                "command": "logging_sourceinterface",
+                                "hidden": false,
+                                "ui": "text",
+                                "value": "FastEthernet0"
+                            },
+                            {
+                                "name": "Servers",
+                                "command": "logging_servers",
+                                "hidden": false,
+                                "ui": "servers",
+                                "values": [
+                                    "192.168.0.1"
+                                ]
                             }
                          ]
                     },
@@ -224,31 +260,31 @@
                                 "ui": "checkboxgroup",
                                 "fields": [
                                     {
-                                        "name": "Use subnet zero",
+                                        "label": "Use subnet zero",
                                         "hidden": true,
                                         "value": "subnet zero",
                                         "enabled": true
                                     },
                                     {
-                                        "name": "Allow source routing",
+                                        "label": "Allow source routing",
                                         "hidden": true,
                                         "value": "source-route",
                                         "enabled": false
                                     },
                                     {
-                                        "name": "Lookup domain names",
+                                        "label": "Lookup domain names",
                                         "hidden": true,
                                         "value": "domain-lookup",
                                         "enabled": false
                                     },
                                     {
-                                        "name": "Enable BOOTP server",
+                                        "label": "Enable BOOTP server",
                                         "hidden": true,
                                         "value": "bootp server",
                                         "enabled": false
                                     },
                                     {
-                                        "name": "Verify VLAN headers",
+                                        "label": "Verify VLAN headers",
                                         "hidden": true,
                                         "value": "verify header vlan all",
                                         "enabled": false
@@ -300,25 +336,25 @@
                                 "ui": "checkboxgroup",
                                 "fields": [
                                     {
-                                        "name": "UDLD",
+                                        "label": "UDLD",
                                         "hidden": true,
                                         "value": "udld",
                                         "enabled": true
                                     },
                                     {
-                                        "name": "Link flap",
+                                        "label": "Link flap",
                                         "hidden": true,
                                         "value": "link-flap",
                                         "enabled": true
                                     },
                                     {
-                                        "name": "Invalid GBIC",
+                                        "label": "Invalid GBIC",
                                         "hidden": true,
                                         "value": "gbic-invalid",
                                         "enabled": true
                                     },
                                     {
-                                        "name": "Storm control",
+                                        "label": "Storm control",
                                         "hidden": true,
                                         "value": "storm-control",
                                         "enabled": true
@@ -366,6 +402,94 @@
                                 "ui": "stpdisable",
                                 "values": [
                                 ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "NTP",
+                        "hidden": false,
+                        "groups": [
+                            {
+                                "name": "Source Interface",
+                                "command": "ntp_source",
+                                "hidden": false,
+                                "ui": "text",
+                                "value": "FastEthernet0"
+                            },
+                            {
+                                "name": "Servers",
+                                "command": "ntp_servers",
+                                "hidden": false,
+                                "ui": "servers",
+                                "values": [
+                                    "192.168.0.1"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SNMP",
+                        "hidden": true,
+                        "groups": [
+                        ]
+                    },
+                    {
+                        "name": "Banners",
+                        "hidden": true,
+                        "groups": [
+                            {
+                                "name": "Exec",
+                                "command": "banner",
+                                "hidden": false,
+                                "ui": "textarea",
+                                "banner_type": "exec", 
+                                "value": [
+                                    "^C\n",
+                                    "*********************************************************\n",
+                                    "* This system is owned by %COMPANY-X%. If you are not   *\n",
+                                    "* authorized to access this system, exit immediately.   *\n",
+                                    "* Unauthorized access to this system is forbidden by    *\n",
+                                    "* company policies, national, and international laws.   *\n",
+                                    "* Unauthorized users are subject to criminal and civil  *\n",
+                                    "* penalties as well as company initiated disciplinary   *\n",
+                                    "* proceedings.                                          *\n",
+                                    "*                                                       *\n",
+                                    "* By entry into this system you acknowledge that you    *\n",
+                                    "* are authorized access and the level of privilege you  *\n",
+                                    "* subsequently execute on this system. You further      *\n",
+                                    "* acknowledge that by entry into this system you        *\n",
+                                    "* expect no privacy from monitoring.                    *\n",
+                                    "*********************************************************\n",
+                                    "^C"
+                                ]
+
+                            },
+                            {
+                                "name": "Login",
+                                "command": "banner",
+                                "hidden": false,
+                                "ui": "textarea",
+                                "banner_type": "login", 
+                                "value": [
+                                    "^C\n",
+                                    "*********************************************************\n",
+                                    "* This system is owned by %COMPANY-X%. If you are not   *\n",
+                                    "* authorized to access this system, exit immediately.   *\n",
+                                    "* Unauthorized access to this system is forbidden by    *\n",
+                                    "* company policies, national, and international laws.   *\n",
+                                    "* Unauthorized users are subject to criminal and civil  *\n",
+                                    "* penalties as well as company initiated disciplinary   *\n",
+                                    "* proceedings.                                          *\n",
+                                    "*                                                       *\n",
+                                    "* By entry into this system you acknowledge that you    *\n",
+                                    "* are authorized access and the level of privilege you  *\n",
+                                    "* subsequently execute on this system. You further      *\n",
+                                    "* acknowledge that by entry into this system you        *\n",
+                                    "* expect no privacy from monitoring.                    *\n",
+                                    "*********************************************************\n",
+                                    "^C"
+                                ]
+
                             }
                         ]
                     }

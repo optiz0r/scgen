@@ -86,6 +86,9 @@
                                             <div ng-switch-when="select">
                                                 <select name="{{group.command}}" ng-model="group.selected" ng-options="value as label for (value, label) in group.values"></select>
                                             </div>
+                                            <div ng-switch-when="textarea">
+                                                <textarea name="{{group.command}}" rows="6" cols="45" wrap="off" class="span4">{{flatten(group.value)}}</textarea>
+                                            </div>
                                             <div ng-switch-when="hosts">
                                                 <table class="table-bordered table-condensed">
                                                     <thead>
@@ -160,7 +163,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr ng-repeat="vlan in group.values | orderBy:host">
+                                                        <tr ng-repeat="vlan in group.values.sort()">
                                                             <td>{{vlan}}</td>
                                                             <td>
                                                                 <button class="btn btn-danger" ng-click="stpdisable.remove($event, group, $index)">
@@ -179,6 +182,37 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div ng-switch-when="servers">
+                                                <table class="table-bordered table-condensed">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Server</th>
+                                                            <th>Remove</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="server in group.values.sort()">
+                                                            <td>{{server}}</td>
+                                                            <td>
+                                                                <button class="btn btn-danger" ng-click="servers.remove($event, group, $index)">
+                                                                    <i class="icon-remove icon-white"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="parent">
+                                                    <input type="text" placeholder="New Server" ng-model="servers.new_server" />
+                                                    <div>
+                                                        <button class="btn btn-success" ng-click="servers.add($event, group);">
+                                                            <i class="icon-edit icon-white"></i> Add VLAN
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div ng-switch-default>
+                                                Unsupported UI {{group.ui}}
+                                            </div>
                                         </ng-switch>
                                     </div>
                                 </div>
@@ -186,114 +220,6 @@
                                 
                         </div>
                         <h2>Global Configuration</h2>
-
-                        <fieldset><!--{{{-->
-                            <legend>Logging</legend>
-
-                            <div class="control-group">
-                                <label class="control-label" for="logging_events">Logging Events</label>
-                                <div class="controls">
-                                    <label class="checkbox" for="logging_events_link-status">
-                                        <input type="checkbox" id="logging_events_link-status" name="logging_events" value="link-status" checked="checked" class="global" />
-                                        Link Status
-                                    </label>
-                                    <label class="checkbox" for="logging_events_trunk-status">
-                                        <input type="checkbox" id="logging_events_trunk-status" name="logging_events" value="trunk-status" checked="checked" class="global" />
-                                        Trunk Status
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="logging_sourceinterface">Source Interface</label>
-                                <div class="controls">
-                                    <input type="text" id="logging_sourceinterface" name="logging_sourceinterface" value="" class="global validate not_empty" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label for="logging_servers">Logging Servers</label>
-                                <div class="controls">
-                                    <select id="logging_servers" name="logging_servers" multiple="multiple" class="global list">
-                                        <!-- No logging servers defined by default -->
-                                    </select>
-                                    <div>
-                                        <button class="btn btn-danger" id="logging_servers_remove">Remove Selected Servers</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="logging_server_new">New Logging Server</label>
-                                <div class="controls">
-                                    <input type="text" id="logging_server_new" placeholder="IP Address"/>
-                                    <div>
-                                        <button class="btn btn-success" id="logging_servers_add">Add Server</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </fieldset><!--}}}-->
-
-                        <fieldset><!--{{{-->
-                            <legend>NTP</legend>
-
-                            <div class="control-group">
-                                <label class="control-label" for="ntp_source">NTP Source Interface</label>
-                                <div class="controls">
-                                    <input type="text" id="ntp_source" name="ntp_source" value="" class="global validate not_empty" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="ntp_servers">NTP Servers</label>
-                                <div class="controls">
-                                    <select id="ntp_servers" name="ntp_servers" multiple="multiple" class="global list">
-                                        <!-- No NTP servers defined by default -->
-                                    </select>
-                                    <div>
-                                        <button class="btn btn-danger" id="ntp_servers_remove">Remove Selected Servers</button>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="control-group">
-                                <label class="control-label" for="ntp_server_new">New NTP Server</label>
-                                <div class="controls">
-                                    <input type="text" id="ntp_server_new" placeholder="IP Address" />
-                                    <div>
-                                        <button class="btn btn-success" id="ntp_servers_add">Add Server</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </fieldset><!--}}}-->
-
-                        <fieldset><!--{{{-->
-                            <legend>SNMP</legend>
-
-                        </fieldset><!--}}}-->
-
-                        <fieldset><!--{{{-->
-                            <legend>Banners</legend>
-
-                            <div class="control-group">
-                                <label class="control-label" for="banner_exec">Exec Banner</label>
-                                <div class="controls">
-                                    <textarea id="banner_exec" name="banner_exec" rows="6" cols="45" wrap="off" class="global validate not_empty span4"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="banner_login">Login Banner</label>
-                                <div class="controls">
-                                    <textarea id="banner_login" name="banner_login" rows="6" cols="45" wrap="off" class="global validate not_empty span4"></textarea>
-                                </div>
-                            </div>
-                        </fieldset><!--}}}-->
-
-                        <!-- Macros -->
 
                         <h2>Line Configuration</h2>
                         <fieldset class="context_parent"><!--{{{-->
@@ -696,6 +622,7 @@
                                                             <div ng-switch-when="select">
                                                                 {{group.command|ioscommand:context.ios_context:group.selected:group.indent||0}}
                                                             </div>
+                                                            <div ng-switch-when="textarea" style="white-space: pre;">{{group.command|ioscommand:context.ios_context:{name: group.banner_type, contents: flatten(group.value)}:group.indent||0}}</div>
                                                             <div ng-switch-when="hosts">
                                                                 <div ng-repeat="(host, address) in group.values | orderBy:'host'">
                                                                     {{group.command|ioscommand:context.ios_context:hosts.command(host, address):group.indent||0}}
@@ -710,6 +637,14 @@
                                                                 <div ng-repeat="vlan in group.values.sort()">
                                                                     {{group.command|ioscommand:context.ios_context:stpdisable.command(vlan):group.indent||0}}
                                                                 </div>
+                                                            </div>
+                                                            <div ng-switch-when="servers">
+                                                                <div ng-repeat="server in group.values.sort()">
+                                                                    {{group.command|ioscommand:context.ios_context:servers.command(server):group.indent||0}}
+                                                                </div>
+                                                            </div>
+                                                            <div ng-switch-default>
+                                                                ! unsupported type {{group.ui}}
                                                             </div>
                                                         </ng-switch>
                                                     </div>

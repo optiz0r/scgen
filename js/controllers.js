@@ -74,6 +74,25 @@ function models_controller($scope, $http) {
         }
     }
 
+    $scope.servers = {
+        new_server: '',
+        remove: function($event, group, index) {
+            this.new_server = group.values[index];
+            group.values.splice(index, 1);
+        },
+        add: function($event, group) {
+            group.values.push(this.new_server);
+            this.new_server = '';
+        },
+        command: function(server) {
+            return server;
+        }
+    }
+
+    $scope.flatten = function(values) {
+        return values.join('');
+    }
+
 }
 //models_controller.$inject = ['$scope', '$http'];
 
