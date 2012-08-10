@@ -108,10 +108,10 @@
                                                     </tbody>
                                                 </table>
                                                 <div class="parent">
-                                                    <input type="text" placeholder="New Hostname" ng-model="new_host" />
-                                                    <input type="text" placeholder="New IP Address" ng-model="new_address" ng-pattern="validation.ip" />
+                                                    <input type="text" placeholder="New Hostname" ng-model="hosts.new_host" />
+                                                    <input type="text" placeholder="New IP Address" ng-model="hosts.new_address" ng-pattern="validation.ip" />
                                                     <div>
-                                                        <button class="btn btn-success" ng-click="hosts.add($event, group, new_host, new_address);">
+                                                        <button class="btn btn-success" ng-click="hosts.add($event, group);">
                                                             <i class="icon-edit icon-white"></i> Add/Edit Host
                                                         </button>
                                                     </div>
@@ -141,12 +141,40 @@
                                                     </tbody>
                                                 </table>
                                                 <div class="parent">
-                                                    <input type="text" placeholder="New Subnet" ng-model="new_subnet" ng-pattern="validation.ip" />
-                                                    <input type="text" placeholder="New Mask" ng-model="new_mask" ng-pattern="validation.ip" />
-                                                    <input type="text" placeholder="New Gateway" ng-model="new_gateway" ng-pattern="validation.ip" />
+                                                    <input type="text" placeholder="New Subnet" ng-model="routes.new_subnet" ng-pattern="validation.ip" />
+                                                    <input type="text" placeholder="New Mask" ng-model="routes.new_mask" ng-pattern="validation.ip" />
+                                                    <input type="text" placeholder="New Gateway" ng-model="routes.new_gateway" ng-pattern="validation.ip" />
                                                     <div>
-                                                        <button class="btn btn-success" ng-click="routes.add($event, group, new_subnet, new_mask, new_gateway);">
+                                                        <button class="btn btn-success" ng-click="routes.add($event, group);">
                                                             <i class="icon-edit icon-white"></i> Add Route
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div ng-switch-when="stpdisable">
+                                                <table class="table-bordered table-condensed">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>VLAN</th>
+                                                            <th>Remove</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="vlan in group.values | orderBy:host">
+                                                            <td>{{vlan}}</td>
+                                                            <td>
+                                                                <button class="btn btn-danger" ng-click="stpdisable.remove($event, group, $index)">
+                                                                    <i class="icon-remove icon-white"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="parent">
+                                                    <input type="text" placeholder="New VLAN" ng-model="stpdisable.new_vlan" />
+                                                    <div>
+                                                        <button class="btn btn-success" ng-click="stpdisable.add($event, group);">
+                                                            <i class="icon-edit icon-white"></i> Add VLAN
                                                         </button>
                                                     </div>
                                                 </div>
@@ -158,92 +186,6 @@
                                 
                         </div>
                         <h2>Global Configuration</h2>
-
-
-                        <fieldset><!--{{{-->
-                            <legend>Errdisable Recovery</legend>
-
-                            <div class="control-group">
-                                <label class="control-label" for="errdisable_recovery_interval">Errdisable recovery timer interval</label>
-                                <div class="controls">
-                                    <input type="text" id="errdisable_recovery_interval" name="errdisable_recovery_interval" class="global validate not_empty numeric" value="360" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="errdisable_recovery_cause">Automated recovery</label>
-                                <div class="controls">
-
-                                    <label class="checkbox" for="errdisable_recovery_udld">
-                                        <input type="checkbox" id="errdisable_recovery_udld" name="errdisable_recovery_cause" value="udld" checked="checked" class="global" />
-                                        UDLD
-                                    </label>
-                                    <label class="checkbox" for="errdisable_recovery_link-flap">
-                                        <input type="checkbox" id="errdisable_recovery_link-flap" name="errdisable_recovery_cause" value="link-flap" checked="checked" class="global" />
-                                        Link Flap
-                                    </label>
-                                    <label class="checkbox" for="errdisable_recovery_gbic-invalid">
-                                        <input type="checkbox" id="errdisable_recovery_gbic-invalid" name="errdisable_recovery_cause" value="gbic-invalid" checked="checked" class="global" />
-                                        GBIC Invalid
-                                    </label>
-                                    <label class="checkbox" for="errdisable_recovery_storm-control">
-                                        <input type="checkbox" id="errdisable_recovery_storm-control" name="errdisable_recovery_cause" value="storm-control" checked="checked" class="global" />
-                                        Storm Control
-                                    </label>
-                                </div>
-                            </div>
-                        </fieldset><!--}}}-->
-
-                        <fieldset><!--{{{-->
-                            <legend>Spanning Tree</legend>
-
-                            <div class="control-group">
-                                <label class="control-label" for="spanning-tree_mode">Mode</label>
-                                <div class="controls">
-                                    <select id="spanning-tree_mode" name="spanningtree_mode" class="global">
-                                        <option value="pvst">PVST</option>
-                                        <option value="rapid-pvst" selected="selected">Rapid PVST</option>
-                                        <option value="mst">MST</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="spanning-tree_portfast_bpduguard_default">Enable PortFast and BPDUGuard by default?</label>
-                                <div class="controls">
-                                    <input type="checkbox" id="spanning-tree_portfast_bpduguard_default" name="spanningtree_portfast_bpduguard_default" checked="checked" class="global" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="spanning-tree_extend">Use system-id extension?</label>
-                                <div class="controls">
-                                    <input type="checkbox" id="spanning-tree_extend" name="spanningtree_extend" checked="checked" class="global" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="spanning-tree_disable">Disable STP for VLANs</label>
-                                <div class="controls">
-                                    <select id="spanning-tree_disable" name="spanningtree_disable" multiple="multiple" class="global list">
-                                        <!-- Spanning tree not disabled on any VLANs by default -->
-                                    </select>
-                                    <div>
-                                        <button class="btn btn-danger" id="spanning-tree_disable_remove">Remove Selected VLAN</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="spanning-tree_disable_new">VLAN</label>
-                                <div class="controls">
-                                    <input type="text" id="spanning-tree_disable_new" placeholder="VLAN ID" />
-                                    <div>
-                                        <button class="btn btn-success" id="spanning-tree_disable_add">Add VLAN</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
 
                         <fieldset><!--{{{-->
                             <legend>Logging</legend>
@@ -762,6 +704,11 @@
                                                             <div ng-switch-when="routes">
                                                                 <div ng-repeat="route in group.values | orderBy:'subnet'">
                                                                     {{group.command|ioscommand:context.ios_context:routes.command(route.subnet, route.mask, route.gateway):group.indent||0}}
+                                                                </div>
+                                                            </div>
+                                                            <div ng-switch-when="stpdisable">
+                                                                <div ng-repeat="vlan in group.values.sort()">
+                                                                    {{group.command|ioscommand:context.ios_context:stpdisable.command(vlan):group.indent||0}}
                                                                 </div>
                                                             </div>
                                                         </ng-switch>

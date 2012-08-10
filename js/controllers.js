@@ -21,30 +21,56 @@ function models_controller($scope, $http) {
     }
 
     $scope.hosts = {
+        new_host: '',
+        new_address: '',
         remove: function($event, group, host) {
+            this.new_host = host;
+            this.new_address = group.values[host];
             delete group.values[host];
         },
-
-        add: function($event, group, host, address) {
-            group.values[host] = address;
+        add: function($event, group) {
+            group.values[this.new_host] = this.new_address;
+            this.new_host = '';
+            this.new_address = '';
         },
-
         command: function(host, address) {
             return host + ' ' + address;
         }
     }
 
     $scope.routes = {
+        new_subnet: '',
+        new_mask: '',
+        new_gateway: '',
         remove: function($event, group, index) {
+            this.new_subnet = group.values[index].subnet;
+            this.new_mask = group.values[index].mask;
+            this.new_gateway = group.values[index].gateway;
             group.values.splice(index, 1);
         },
-
-        add: function($event, group, subnet, mask, gateway) {
-            group.values.push({subnet: subnet, mask: mask, gateway: gateway});
+        add: function($event, group) {
+            group.values.push({subnet: this.new_subnet, mask: this.new_mask, gateway: this.new_gateway});
+            this.new_subnet = '';
+            this.new_mask = '';
+            this.new_gateway = '';
         },
-
         command: function(subnet, mask, gateway) {
             return subnet + ' ' + mask + ' ' + gateway;
+        }
+    }
+
+    $scope.stpdisable = {
+        new_vlan: '',
+        remove: function($event, group, index) {
+            this.new_vlan = group.values[index];
+            group.values.splice(index, 1);
+        },
+        add: function($event, group) {
+            group.values.push(this.new_vlan);
+            this.new_vlan = '';
+        },
+        command: function(vlan) {
+            return vlan;
         }
     }
 

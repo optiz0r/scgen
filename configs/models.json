@@ -277,8 +277,98 @@
                                 ]
                             }
                         ]
+                    },
+                    {
+                        "name": "Errdisable Recovery",
+                        "hidden": true,
+                        "groups": [
+                            {
+                                "name": "Recovery timer interval",
+                                "command": "errdisable_recovery_interval",
+                                "hidden": true,
+                                "ui": "number",
+                                "value": 300,
+                                "validation": {
+                                    "min": 10,
+                                    "max": 86400
+                                }
+                            },
+                            {
+                                "name": "Recovery from",
+                                "command": "errdisable_recovery_cause",
+                                "hidden": true,
+                                "ui": "checkboxgroup",
+                                "fields": [
+                                    {
+                                        "name": "UDLD",
+                                        "hidden": true,
+                                        "value": "udld",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "Link flap",
+                                        "hidden": true,
+                                        "value": "link-flap",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "Invalid GBIC",
+                                        "hidden": true,
+                                        "value": "gbic-invalid",
+                                        "enabled": true
+                                    },
+                                    {
+                                        "name": "Storm control",
+                                        "hidden": true,
+                                        "value": "storm-control",
+                                        "enabled": true
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Spanning Tree",
+                        "hidden": false,
+                        "groups": [
+                            {
+                                "name": "Mode",
+                                "command": "spanningtree_mode",
+                                "hidden": false,
+                                "ui": "select",
+                                "selected": "rapid-pvst",
+                                "values": {
+                                    "rapid-pvst": "Rapid PVST",
+                                    "pvst": "PVST",
+                                    "mst": "MST"
+                                }
+                            },
+                            {
+                                "name": "Enable PortFast BPDUGuard by default?",
+                                "command": "spanningtree_portfast_bpduguard_default",
+                                "hidden": false,
+                                "ui": "checkbox",
+                                "value": false,
+                                "enabled": true
+                            },
+                            {
+                               "name": "Use System ID extension?",
+                               "command": "spanningtree_extend",
+                               "hidden": true,
+                               "ui": "checkbox",
+                               "value": false,
+                               "enabled": true
+                            },
+                            {
+                                "name": "Disable for VLANs",
+                                "command": "spanningtree_disable",
+                                "hidden": false,
+                                "ui": "stpdisable",
+                                "values": [
+                                ]
+                            }
+                        ]
                     }
-
                 ]
             },
             {
