@@ -492,6 +492,21 @@
 
                             }
                         ]
+                    },
+                    {
+                        "name": "Alias Configuration",
+                        "hidden": false,
+                        "groups": [
+                            {
+                                "name": "Aliases",
+                                "command": "alias",
+                                "hidden": false,
+                                "ui": "aliases",
+                                "values": [
+                                    {"context": "exec", "name": "sid", "command": "show interface description"}
+                                ]
+                            }
+                        ]
                     }
                 ]
             },

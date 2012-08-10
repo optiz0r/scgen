@@ -89,6 +89,27 @@ function models_controller($scope, $http) {
         }
     }
 
+    $scope.aliases = {
+        new_context: '',
+        new_name: '',
+        new_command: '',
+        remove: function($event, group, index) {
+            this.new_context = group.values[index].context;
+            this.new_name = group.values[index].name;
+            this.new_command = group.values[index].command;
+            delete group.values[index];
+        },
+        add: function($event, group) {
+            group.values.push({context: this.new_context, name: this.new_name, command: this.new_command});
+            this.new_context = '';
+            this.new_name = '';
+            this.new_command = '';
+        },
+        command: function(context, name, command) {
+            return context + ' ' + name + ' ' + command;
+        }
+    }
+
     $scope.flatten = function(values) {
         return values.join('');
     }
