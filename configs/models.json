@@ -497,8 +497,131 @@
             },
             {
                 "name": "Line Configuration",
-                "hidden": true,
+                "hidden": false,
+                "ios_context": "global",
                 "sections": [
+                    {
+                        "name": "Console",
+                        "hidden": false,
+                        "ios_context": "line",
+                        "switch_context": "line",
+                        "switch_context_params": [
+                            "con 0"
+                        ], 
+                        "indent": 1,
+                        "groups": [
+                            {
+                                "name": "Exec Timeout",
+                                "command": "exectimeout",
+                                "ui": "text",
+                                "hidden": true,
+                                "value": "15 0"
+                            },
+                            {
+                                "name": "Password",
+                                "command": "password",
+                                "ui": "text",
+                                "hidden": false,
+                                "value": "5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix."
+                            },
+                            {
+                                "name": "Logging",
+                                "command": "logging",
+                                "ui": "select",
+                                "hidden": true,
+                                "selected": "synchronous",
+                                "values": {
+                                    "synchronous": "Synchronous",
+                                    "asynchronous": "Asynchronous"
+                                }
+                            },
+                            {
+                                "name": "Stop bits",
+                                "command": "stopbits",
+                                "ui": "number",
+                                "hidden": true,
+                                "value": 1,
+                                "validation": {
+                                    "min": 1,
+                                    "max": 8
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "VTY 0-4",
+                        "hidden": false,
+                        "ios_context": "line",
+                        "switch_context": "line",
+                        "switch_context_params": [
+                            "vty 0 4"
+                        ], 
+                        "indent": 1,
+                        "groups": [
+                            {
+                                "name": "Exec Timeout",
+                                "command": "exectimeout",
+                                "ui": "text",
+                                "hidden": true,
+                                "value": "15 0"
+                            },
+                            {
+                                "name": "Password",
+                                "command": "password",
+                                "ui": "text",
+                                "hidden": false,
+                                "value": "5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix."
+                            },
+                            {
+                                "name": "Logging",
+                                "command": "logging",
+                                "ui": "select",
+                                "hidden": true,
+                                "selected": "synchronous",
+                                "values": {
+                                    "synchronous": "Synchronous",
+                                    "asynchronous": "Asynchronous"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "VTY 5-15",
+                        "hidden": false,
+                        "ios_context": "line",
+                        "switch_context": "line",
+                        "switch_context_params": [
+                            "vty 5-15"
+                        ], 
+                        "indent": 1,
+                        "groups": [
+                            {
+                                "name": "Exec Timeout",
+                                "command": "exectimeout",
+                                "ui": "text",
+                                "hidden": true,
+                                "value": "15 0"
+                            },
+                            {
+                                "name": "Password",
+                                "command": "password",
+                                "ui": "text",
+                                "hidden": false,
+                                "value": "5 $1$pdQG$kP3/m4HRVqE4BlYzDl6Ix."
+                            },
+                            {
+                                "name": "Logging",
+                                "command": "logging",
+                                "ui": "select",
+                                "hidden": true,
+                                "selected": "synchronous",
+                                "values": {
+                                    "synchronous": "Synchronous",
+                                    "asynchronous": "Asynchronous"
+                                }
+                            }
+                        ]
+                    }
                 ]
             }
         ]

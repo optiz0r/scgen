@@ -219,129 +219,7 @@
                             </fieldset>
                                 
                         </div>
-                        <h2>Global Configuration</h2>
 
-                        <h2>Line Configuration</h2>
-                        <fieldset class="context_parent"><!--{{{-->
-                            <legend>Console Lines</legend>
-
-                            <input type="hidden" id="line_con_0" name="line" value="con 0" class="global" />
-                            <input type="hidden" id="line_con_0_switch" name="__switch" value="line" class="global" />
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_con_exectimeout">Exec Timeout</label>
-                                <div class="controls">
-                                    <input type="text" id="line_con_exectimeout" name="exectimeout" value="15 0" class="line validate not_empty" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_con_password">Password</label>
-                                <div class="controls">
-                                    <select id="line_con_password" name="password" class="line">
-                                        <option value="7 141A1D05070133">Default</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_con_logging">Logging Mode</label>
-                                <div class="controls">
-                                    <select id="line_con_logging" name="logging" class="line">
-                                        <option value="asynchronous">Asynchronous</option>
-                                        <option value="synchronous" selected="selected">Synchronous</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_con_stopbits">Stop Bits</label>
-                                <div class="controls">
-                                    <input type="text" id="line_con_stopbits" name="stopbits" value="1" maxlength="2" class="line validate not_empty numeric" />
-                                </div>
-                            </div>
-                        </fieldset><!--}}}-->
-
-                        <fieldset class="context_parent"><!--{{{-->
-                            <legend>VTY Lines 0-4</legend>
-
-                            <input type="hidden" id="line_vty04" name="line" value="vty 0 4" class="global" />
-                            <input type="hidden" id="line_vty04_switch" name="__switch" value="line" class="global" />
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_vty04_exectimeout">Exec Timeout</label>
-                                <div class="controls">
-                                    <input type="text" id="line_vty04_exectimeout" name="exectimeout" value="15 0" class="line validate not_empty" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_vty04_password">Password</label>
-                                <div class="controls">
-                                    <select id="line_vty04_password" name="password" class="line">
-                                        <option value="7 104306170E120B">Default</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_vty04_logging">Logging Mode</label>
-                                <div class="controls">
-                                    <select id="line_vty04_logging" name="logging" class="line">
-                                        <option value="asynchronous">Asynchronous</option>
-                                        <option value="synchronous" selected="selected">Synchronous</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_vty04_stopbits">Stop Bits</label>
-                                <div class="controls">
-                                    <input type="text" id="line_vty04_stopbits" name="stopbits" value="1" maxlength="2" class="line validate not_empty numeric" />
-                                </div>
-                            </div>
-                        </fieldset><!--}}}-->
-                            
-                        <fieldset class="context_parent"><!--{{{-->
-                            <legend>VTY Lines 5-15</legend>
-
-                            <input type="hidden" id="line_vty515" name="line" value="vty 5 15" class="global" />
-                            <input type="hidden" id="line_vty515_switch" name="__switch" value="line" class="global" />
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_vty515_exectimeout">Exec Timeout</label>
-                                <div class="controls">
-                                    <input type="text" id="line_vty515_exectimeout" name="exectimeout" value="15 0" class="line validate not_empty" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_vty515_password">Password</label>
-                                <div class="controls">
-                                    <select id="line_vty515_password" name="password" class="line">
-                                        <option value="7 104306170E120B">Default</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_vty515_logging">Logging Mode</label>
-                                <div class="controls">
-                                    <select id="line_vty515_logging" name="logging" class="line">
-                                        <option value="asynchronous">Asynchronous</option>
-                                        <option value="synchronous" selected="selected">Synchronous</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="line_vty515_stopbits">Stop Bits</label>
-                                <div class="controls">
-                                    <input type="text" id="line_vty515_stopbits" name="stopbits" value="1" maxlength="2" class="line validate not_empty numeric" />
-                                </div>
-                            </div>
-                        </fieldset><!--}}}-->
-                            
                         <!-- Aliases -->
                         <h2>Aliases</h2>
                         <fieldset>
@@ -594,6 +472,7 @@
                                 <code>
                                     <div ng-repeat="context in selected_model.config">
                                         <div ng-repeat="section in context.sections">
+                                            <div class="code">{{contexts.switch(section, context)}}</div>
                                             <div ng-repeat="group in section.groups">
                                                 <ng-switch on="group.fields">
                                                     <div ng-switch-default>
@@ -610,38 +489,22 @@
                                                     </div>
                                                     <div ng-switch-when="undefined">
                                                         <ng-switch on="group.ui">
-                                                            <div ng-switch-when="text">
-                                                                {{group.command|ioscommand:context.ios_context:group.value:false:group.indent||0}}
-                                                            </div>
-                                                            <div ng-switch-when="number">
-                                                                {{group.command|ioscommand:context.ios_context:group.value:false:group.indent||0}}
-                                                            </div>
-                                                            <div ng-switch-when="checkbox">
-                                                                {{group.command|ioscommand:context.ios_context:group.value:!group.enabled:group.indent||0}}
-                                                            </div>
-                                                            <div ng-switch-when="select">
-                                                                {{group.command|ioscommand:context.ios_context:group.selected:group.indent||0}}
-                                                            </div>
-                                                            <div ng-switch-when="textarea" style="white-space: pre;">{{group.command|ioscommand:context.ios_context:{name: group.banner_type, contents: flatten(group.value)}:group.indent||0}}</div>
+                                                            <div ng-switch-when="text" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.value:false:group.indent||section.indent||0}}</div>
+                                                            <div ng-switch-when="number" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.value:false:group.indent||section.indent||0}}</div>
+                                                            <div ng-switch-when="checkbox" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.value:!group.enabled:group.indent||section.indent||0}}</div>
+                                                            <div ng-switch-when="select" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.selected:false:group.indent||section.indent||0}}</div>
+                                                            <div ng-switch-when="textarea" class="code">{{group.command|ioscommand:context.ios_context:{name: group.banner_type, contents: flatten(group.value)}:group.indent||section.indent||0}}</div>
                                                             <div ng-switch-when="hosts">
-                                                                <div ng-repeat="(host, address) in group.values | orderBy:'host'">
-                                                                    {{group.command|ioscommand:context.ios_context:hosts.command(host, address):group.indent||0}}
-                                                                </div>
+                                                                <div ng-repeat="(host, address) in group.values | orderBy:'host'" class="code">{{group.command|ioscommand:context.ios_context:hosts.command(host, address):group.indent||section.indent||0}}</div>
                                                             </div>
                                                             <div ng-switch-when="routes">
-                                                                <div ng-repeat="route in group.values | orderBy:'subnet'">
-                                                                    {{group.command|ioscommand:context.ios_context:routes.command(route.subnet, route.mask, route.gateway):group.indent||0}}
-                                                                </div>
+                                                                <div ng-repeat="route in group.values | orderBy:'subnet'" class="code">{{group.command|ioscommand:context.ios_context:routes.command(route.subnet, route.mask, route.gateway):group.indent||section.indent||0}}</div>
                                                             </div>
                                                             <div ng-switch-when="stpdisable">
-                                                                <div ng-repeat="vlan in group.values.sort()">
-                                                                    {{group.command|ioscommand:context.ios_context:stpdisable.command(vlan):group.indent||0}}
-                                                                </div>
+                                                                <div ng-repeat="vlan in group.values.sort()" class="code">{{group.command|ioscommand:context.ios_context:stpdisable.command(vlan):group.indent||section.indent||0}}</div>
                                                             </div>
                                                             <div ng-switch-when="servers">
-                                                                <div ng-repeat="server in group.values.sort()">
-                                                                    {{group.command|ioscommand:context.ios_context:servers.command(server):group.indent||0}}
-                                                                </div>
+                                                                <div ng-repeat="server in group.values.sort()" class="code">{{group.command|ioscommand:context.ios_context:servers.command(server):group.indent||section.indent||0}}</div>
                                                             </div>
                                                             <div ng-switch-default>
                                                                 ! unsupported type {{group.ui}}
@@ -650,6 +513,7 @@
                                                     </div>
                                                 </ng-switch>
                                             </div>
+                                            <div class="code">{{contexts.exit(section, context)}}</div>
                                         </div>
                                     </div>
                                 </code>

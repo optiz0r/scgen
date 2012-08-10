@@ -93,6 +93,19 @@ function models_controller($scope, $http) {
         return values.join('');
     }
 
+    $scope.contexts = {
+        switch: function(node, parent) {
+            if (node.ios_context && parent.ios_context) {
+                return scgen.command(parent.indent||0, parent.ios_context, node.switch_context, node.switch_context_params, false)
+            }
+        },
+        exit: function(node, parent) {
+            if (node.ios_context && parent.ios_context && node.ios_context != parent.ios_context) {
+                return scgen.command(node.indent||parent.indent||0, 'superglobal', 'exit', undefined, false);
+            }
+        }
+    }
+
 }
 //models_controller.$inject = ['$scope', '$http'];
 
