@@ -2,8 +2,8 @@
     { 
         "name": "3750x Datacentre Access Switch",
         "description": "Cisco 3750X",
-        "config": [
-            {
+        "contexts": {
+            "global": {
                 "name": "Global Configuration",
                 "ios_context": "global",
                 "sections": [
@@ -507,10 +507,16 @@
                                 ]
                             }
                         ]
+                    },
+                    {
+                        "name": "Line Configuration",
+                        "hidden": false,
+                        "ui": "include",
+                        "target": "lines"
                     }
                 ]
             },
-            {
+            "lines": {
                 "name": "Line Configuration",
                 "hidden": false,
                 "ios_context": "global",
@@ -639,7 +645,7 @@
                     }
                 ]
             }
-        ]
+        }
     },
     {
         "name": "6500-agg",
