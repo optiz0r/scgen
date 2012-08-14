@@ -182,14 +182,6 @@ var scgen = {
             }
         }
 
-        // Add Aliases
-        if (data.aliases) {
-            for (var name in data.aliases) {
-                var alias = data.aliases[name];
-                ui.alias.add(alias.context, name, alias.command);
-            }
-        }
-
         // Add VLANs
         if (data.vlans) {
             for (var id in data.vlans) {
@@ -546,7 +538,6 @@ var ui = {
 
         // Handle the UI components
         this.list.init();
-        this.alias.init();
         this.vlan.init();
         this.interface.init();
         this.svi.init();
@@ -728,49 +719,6 @@ var ui = {
 
     },
 
-    alias: {
-        init: function() {
-            $('#alias_add').click(ui.alias.addFromForm);
-        },
-
-        add: function(context, name, command) {
-            var html = $('#alias_template_body').html();
-            html = html.replace(/aliasid/g, context + '_' + name);
-            var row = $(html);
-
-            $('[name="context"]', row).val(context);
-            $('[name="name"]', row).val(name);
-            $('[name="command"]', row).val(command);
-
-            $('[name="alias"]', row).val(
-                context + ' ' + name + ' ' + command        
-            );
-
-            $('.add_global', row).removeClass('add_global').addClass('global');
-            $('.add_generate', row).removeClass('add_generate').change(function() {
-                // TODO - obsolete this using jquery.on during the global init
-                scgen.generate();
-            });
-            
-            row.appendTo('#alias_list');
-
-            scgen.generate();
-        },
-
-        addFromForm: function(e) {
-            ui.alias.add(
-                $('#alias_add_context').val(),
-                $('#alias_add_name').val(),
-                $('#alias_add_command').val()
-            );
-
-            $('#alias_add_name').val('');
-            $('#alias_add_command').val('');
-
-            e.preventDefault();
-        },
-    },
-    
     vlan: {
 
         init: function() {
