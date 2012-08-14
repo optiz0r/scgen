@@ -60,15 +60,12 @@
                     </div>
                     <form id="config_form" class="form-horizontal">
                         <div>
-                            <h2>{{selected_model.contexts.global.name}}</h2>
                             <script type="text/ng-template" id="context.tpl">
-                                <div ng-repeat="section in contexts.get().sections | filter:nothidden">
+                                <h2>{{context.name}}</h2>
+                                <div ng-repeat="section in context.sections | filter:nothidden">
                                     <ng-switch on="section.ui">
                                         <div ng-switch-when="include">
-                                            {{contexts.push(selected_model.contexts[section.target])}}
-                                            <h2>{{contexts.get().name}}</h2>
-                                            <ng-include src="'context.tpl'"></ng-include>
-                                            {{contexts.pop()}}
+                                            <ng-include src="'context.tpl'" ng-repeat="context in array(selected_model.contexts[section.target])"></ng-include>
                                         </div>
                                         <fieldset ng-switch-default>
                                             <legend>{{section.name}}</legend>
@@ -312,7 +309,7 @@
                                     </ng-switch>
                                 </div>
                             </script>
-                            <ng-include src="'context.tpl'"></ng-include>
+                            <ng-include src="'context.tpl'" ng-repeat="context in array(selected_model.contexts.global)"></ng-include>
                         </div>
 
                         <h2>VLAN Configuration</h2>
@@ -513,50 +510,48 @@
                             <div class="control-group">
                                 <script type="text/ng-template" id="context-output.tpl">
                                     <code>
-                                        <div ng-repeat="section in contexts.get().sections">
+                                        <div ng-repeat="section in context.sections">
                                             <ng-switch on="section.ui">
                                                 <div ng-switch-when="include">
-                                                    {{contexts.push(selected_model.contexts[section.target])}}
-                                                    <ng-include src="'context-output.tpl'"></ng-include>
-                                                    {{contexts.pop()}}
+                                                    <ng-include src="'context-output.tpl'" ng-repeat="context in array(selected_model.contexts[section.target])"></ng-include>
                                                 </div>
                                                 <div ng-switch-default>
-                                                    <div class="code">{{contexts.switch(section, contexts.get())}}</div>
+                                                    <div class="code">{{contexts.switch(section, context)}}</div>
                                                     <div ng-repeat="group in section.groups">
                                                         <ng-switch on="group.fields">
                                                             <div ng-switch-default>
                                                                 <div ng-repeat="field in group.fields">
                                                                     <ng-switch on="group.ui">
                                                                         <div ng-switch-when="checkboxgroup">
-                                                                            {{field.command||group.command|ioscommand:contexts.get().ios_context:field.value:!field.enabled:group.indent||0}}
+                                                                            {{field.command||group.command|ioscommand:context.ios_context:field.value:!field.enabled:group.indent||0}}
                                                                         </div>
                                                                         <div ng-switch-default>
-                                                                            {{group.command|ioscommand:contexts.get().ios_context:field.value:false:group.indent||0}}
+                                                                            {{group.command|ioscommand:context.ios_context:field.value:false:group.indent||0}}
                                                                         </div>
                                                                     </ng-switch> 
                                                                 </div>
                                                             </div>
                                                             <div ng-switch-when="undefined">
                                                                 <ng-switch on="group.ui">
-                                                                    <div ng-switch-when="text" class="code">{{group.command|ioscommand:section.ios_context||contexts.get().ios_context:group.value:false:group.indent||section.indent||0}}</div>
-                                                                    <div ng-switch-when="number" class="code">{{group.command|ioscommand:section.ios_context||contexts.get().ios_context:group.value:false:group.indent||section.indent||0}}</div>
-                                                                    <div ng-switch-when="checkbox" class="code">{{group.command|ioscommand:section.ios_context||contexts.get().ios_context:group.value:!group.enabled:group.indent||section.indent||0}}</div>
-                                                                    <div ng-switch-when="select" class="code">{{group.command|ioscommand:section.ios_context||contexts.get().ios_context:group.selected:false:group.indent||section.indent||0}}</div>
-                                                                    <div ng-switch-when="textarea" class="code">{{group.command|ioscommand:contexts.get().ios_context:{name: group.banner_type, contents: flatten(group.value)}:group.indent||section.indent||0}}</div>
+                                                                    <div ng-switch-when="text" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.value:false:group.indent||section.indent||0}}</div>
+                                                                    <div ng-switch-when="number" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.value:false:group.indent||section.indent||0}}</div>
+                                                                    <div ng-switch-when="checkbox" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.value:!group.enabled:group.indent||section.indent||0}}</div>
+                                                                    <div ng-switch-when="select" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.selected:false:group.indent||section.indent||0}}</div>
+                                                                    <div ng-switch-when="textarea" class="code">{{group.command|ioscommand:context.ios_context:{name: group.banner_type, contents: flatten(group.value)}:group.indent||section.indent||0}}</div>
                                                                     <div ng-switch-when="hosts">
-                                                                        <div ng-repeat="(host, address) in group.values | orderBy:'host'" class="code">{{group.command|ioscommand:contexts.get().ios_context:hosts.command(host, address):group.indent||section.indent||0}}</div>
+                                                                        <div ng-repeat="(host, address) in group.values | orderBy:'host'" class="code">{{group.command|ioscommand:context.ios_context:hosts.command(host, address):group.indent||section.indent||0}}</div>
                                                                     </div>
                                                                     <div ng-switch-when="routes">
-                                                                        <div ng-repeat="route in group.values | orderBy:'subnet'" class="code">{{group.command|ioscommand:contexts.get().ios_context:routes.command(route.subnet, route.mask, route.gateway):group.indent||section.indent||0}}</div>
+                                                                        <div ng-repeat="route in group.values | orderBy:'subnet'" class="code">{{group.command|ioscommand:context.ios_context:routes.command(route.subnet, route.mask, route.gateway):group.indent||section.indent||0}}</div>
                                                                     </div>
                                                                     <div ng-switch-when="stpdisable">
-                                                                        <div ng-repeat="vlan in group.values.sort()" class="code">{{group.command|ioscommand:contexts.get().ios_context:stpdisable.command(vlan):group.indent||section.indent||0}}</div>
+                                                                        <div ng-repeat="vlan in group.values.sort()" class="code">{{group.command|ioscommand:context.ios_context:stpdisable.command(vlan):group.indent||section.indent||0}}</div>
                                                                     </div>
                                                                     <div ng-switch-when="servers">
-                                                                        <div ng-repeat="server in group.values.sort()" class="code">{{group.command|ioscommand:contexts.get().ios_context:servers.command(server):group.indent||section.indent||0}}</div>
+                                                                        <div ng-repeat="server in group.values.sort()" class="code">{{group.command|ioscommand:context.ios_context:servers.command(server):group.indent||section.indent||0}}</div>
                                                                     </div>
                                                                     <div ng-switch-when="aliases">
-                                                                        <div ng-repeat="alias in group.values.sort() | orderBy:['context','name']" class="code">{{group.command|ioscommand:contexts.get().ios_context:aliases.command(alias.context, alias.name, alias.command):group.indent||section.indent||0}}</div>
+                                                                        <div ng-repeat="alias in group.values.sort() | orderBy:['context','name']" class="code">{{group.command|ioscommand:context.ios_context:aliases.command(alias.context, alias.name, alias.command):group.indent||section.indent||0}}</div>
                                                                     </div>
                                                                     <div ng-switch-default>
                                                                         ! unsupported type {{group.ui}}
@@ -565,13 +560,13 @@
                                                             </div>
                                                         </ng-switch>
                                                     </div>
-                                                    <div class="code">{{contexts.exit(section, contexts.get())}}</div>
+                                                    <div class="code">{{contexts.exit(section, context)}}</div>
                                                 </div>
                                             </ng-switch>
                                         </div>
                                     </code>
                                 </script>
-                                <ng-include src="'context-output.tpl'"></ng-include>
+                                <ng-include src="'context-output.tpl'" ng-repeat="context in array(selected_model.contexts.global)"></ng-include>
                                 <textarea class="span6" wrap="off" id="generated_config"></textarea>
                             </div>
                         </fieldset>

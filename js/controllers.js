@@ -5,7 +5,6 @@ function models_controller($scope, $http) {
     $http.get('configs/models.json').success(function(data) {
         $scope.models = data;
         $scope.selected_model = $scope.models.length > 0 ? $scope.models[0] : undefined;
-        $scope.context_stack = $scope.contexts.context_stack = [$scope.models[0].contexts.global];
     });
 
     $scope.nothidden = function(input) {
@@ -115,25 +114,7 @@ function models_controller($scope, $http) {
         return values.join('');
     }
 
-    $scope.context_stack = [];
     $scope.contexts = {
-        context_stack: [],
-        get: function() {
-            return this.context_stack.length > 0 ? this.context_stack[0] : {name:"undefined"};
-        },
-        push: function(context) {
-            this.context_stack.unshift(context);
-        },
-        pop: function() {
-            this.context_stack.shift();
-        },
-        dump: function() {
-            ret = ''
-            for (context in this.context_stack) {
-                ret = ret + context.name + ' ';
-            }
-            return ret;
-        },
         switch: function(node, parent) {
             if (node.ios_context && parent.ios_context) {
                 return scgen.command(parent.indent||0, parent.ios_context, node.switch_context, node.switch_context_params, false)
@@ -144,6 +125,10 @@ function models_controller($scope, $http) {
                 return scgen.command(node.indent||parent.indent||0, 'superglobal', 'exit', undefined, false);
             }
         }
+    }
+
+    $scope.array = function(element) {
+        return [element];
     }
 
 }
