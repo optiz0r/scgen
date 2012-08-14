@@ -18,6 +18,7 @@
         <script src="js/scripts.js"></script>
         <script src="js/ui.js"></script>
         <script src="configs/default-config.js"></script>
+        <script src="js/directives.js"></script>
         <script src="js/filters.js"></script>
         <script src="js/controllers.js"></script>
         <script src="js/app.js"></script>
@@ -62,14 +63,14 @@
                         <div>
                             <script type="text/ng-template" id="context.tpl">
                                 <h2>{{context.name}}</h2>
-                                <div ng-repeat="section in context.sections | filter:nothidden">
+                                <div ng-repeat="section in context.sections | filter:nothidden | orderBy:'order'">
                                     <ng-switch on="section.ui">
                                         <div ng-switch-when="include">
                                             <ng-include src="'context.tpl'" ng-repeat="context in array(selected_model.contexts[section.target])"></ng-include>
                                         </div>
                                         <fieldset ng-switch-default>
                                             <legend>{{section.name}}</legend>
-                                            <ng-switch on="group.ui" ng-repeat="group in section.groups | filter:nothidden">
+                                            <ng-switch on="group.ui" ng-repeat="group in section.groups | filter:nothidden | orderBy:'order'">
                                                 <div ng-switch-when="checkboxgroup">
                                                     <div class="control-group">
                                                         <label class="control-label">{{group.name}}</label>
@@ -301,60 +302,36 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div ng-switch-when="addvlan">
+                                                    <div class="control-group">
+                                                        <label>New VLAN</label>
+                                                        <div class="controls">
+                                                            <input type="number" min="2" max="4096" ng-model="vlans.new_vlan" />
+                                                            <input type="text" placeholder="New Description" ng-model="vlans.new_description" />
+                                                            <div>
+																<button class="btn btn-success" ng-click="vlans.add($event, context);">
+																	<i class="icon-edit icon-white"></i> Add VLAN
+																</button>
+															</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div ng-switch-default>
                                                     Unsupported UI {{group.ui}}
                                                 </div>
                                             </ng-switch>
                                         </fieldset>
                                     </ng-switch>
+                                    <div class="control-group" ngm-if="section.removeable">
+                                        <div class="controls">
+                                            <button class="btn btn-danger" ng-click="vlans.remove($event, context, $index);">
+                                                <i class="icon-remove icon-white"></i> Remove VLAN
+                                        </div>
+                                    </div>
                                 </div>
                             </script>
                             <ng-include src="'context.tpl'" ng-repeat="context in array(selected_model.contexts.global)"></ng-include>
                         </div>
-
-                        <h2>VLAN Configuration</h2>
-                        <fieldset id="vlan_fields"><!--{{{-->
-                            <legend for="vlan_fields">VLANs</legend>
-
-                            <table id="vlans" class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Vlan</th>
-                                        <th>Description</th>
-                                        <th>Remove</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="vlans_list">
-                                    <!-- No VLANs defined by default -->
-                                </tbody>
-                            </table>
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Add VLAN</legend>
-
-                            <div class="control-group">
-                                <label class="control-label">VLAN</label>
-                                <div class="controls">
-                                    <input type="text" id="add_vlan_id" name="add_vlan_id" value="" maxlength="4" class="numeric" placeholder="VLAN ID" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="add_vlan_description">Description</label>
-                                <div class="controls">
-                                    <input type="text" id="add_vlan_description" name="description" value="" maxlength="32" class="alphanumeric" placeholder="Description" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <div class="controls">
-                                    <button class="btn btn-success" id="add_vlan_add" name="add_vlan_add">Add VLAN</button>
-                                </div>
-                            </div>
-
-                        </fieldset><!--}}}-->
-
 
                         <h2>Interface Configuration</h2>
                         <fieldset>
@@ -510,14 +487,14 @@
                             <div class="control-group">
                                 <script type="text/ng-template" id="context-output.tpl">
                                     <code>
-                                        <div ng-repeat="section in context.sections">
+                                        <div ng-repeat="section in context.sections | orderBy:'order'">
                                             <ng-switch on="section.ui">
                                                 <div ng-switch-when="include">
                                                     <ng-include src="'context-output.tpl'" ng-repeat="context in array(selected_model.contexts[section.target])"></ng-include>
                                                 </div>
                                                 <div ng-switch-default>
                                                     <div class="code">{{contexts.switch(section, context)}}</div>
-                                                    <div ng-repeat="group in section.groups">
+                                                    <div ng-repeat="group in section.groups | orderBy:'order'">
                                                         <ng-switch on="group.fields">
                                                             <div ng-switch-default>
                                                                 <div ng-repeat="field in group.fields">
@@ -553,6 +530,7 @@
                                                                     <div ng-switch-when="aliases">
                                                                         <div ng-repeat="alias in group.values.sort() | orderBy:['context','name']" class="code">{{group.command|ioscommand:context.ios_context:aliases.command(alias.context, alias.name, alias.command):group.indent||section.indent||0}}</div>
                                                                     </div>
+																	<div ng-switch-when="addvlan"></div>
                                                                     <div ng-switch-default>
                                                                         ! unsupported type {{group.ui}}
                                                                     </div>

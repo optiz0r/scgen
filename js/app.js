@@ -1,1 +1,1 @@
-angular.module('scgen', ['scgenFilters'])
+angular.module('scgen', ['scgenFilters', 'scgenDirectives'])

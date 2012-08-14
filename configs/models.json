@@ -513,6 +513,12 @@
                         "hidden": false,
                         "ui": "include",
                         "target": "lines"
+                    },
+                    {
+                        "name": "VLAN Configuration",
+                        "hidden": false,
+                        "ui": "include",
+                        "target": "vlans"
                     }
                 ]
             },
@@ -640,6 +646,63 @@
                                     "synchronous": "Synchronous",
                                     "asynchronous": "Asynchronous"
                                 }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "vlans": {
+                "name": "VLAN Configuration",
+                "hidden": false,
+                "ios_context": "global",
+                "sections": [
+                    {
+                        "name": "VLAN 1",
+                        "hidden": false,
+                        "ios_context": "vlan",
+                        "switch_context": "vlan",
+                        "switch_context_params": [
+                            1
+                        ],
+                        "indent": 1,
+                        "order": 1,
+                        "groups": [
+                            {
+                                "name": "Description",
+                                "command": "description",
+                                "ui": "text",
+                                "value": "Default"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "VLAN 4093",
+                        "hidden": false,
+                        "ios_context": "vlan",
+                        "switch_context": "vlan",
+                        "switch_context_params": [
+                            4093
+                        ],
+                        "indent": 1,
+                        "order": 4093,
+                        "removeable": true,
+                        "groups": [
+                            {
+                                "name": "Description",
+                                "command": "description",
+                                "ui": "text",
+                                "value": "Dummy VLAN"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Add VLAN",
+                        "hidden": false,
+                        "order": 4097,
+                        "groups": [
+                            {
+                                "name": "VLAN",
+                                "ui": "addvlan"
                             }
                         ]
                     }

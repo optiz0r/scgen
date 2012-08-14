@@ -8,7 +8,7 @@ function models_controller($scope, $http) {
     });
 
     $scope.nothidden = function(input) {
-        return input.hidden != true;
+        return ! (input && input.hidden);
     }
 
     $scope.validation = {
@@ -97,7 +97,7 @@ function models_controller($scope, $http) {
             this.new_context = group.values[index].context;
             this.new_name = group.values[index].name;
             this.new_command = group.values[index].command;
-            delete group.values[index];
+            group.values.splice(index, 1);
         },
         add: function($event, group) {
             group.values.push({context: this.new_context, name: this.new_name, command: this.new_command});
@@ -108,6 +108,43 @@ function models_controller($scope, $http) {
         command: function(context, name, command) {
             return context + ' ' + name + ' ' + command;
         }
+    }
+
+    $scope.vlans = {
+        new_vlan: '',
+        new_description: '',
+        remove: function($event, context, $index) {
+            vlan = context.sections[$index];
+            this.new_vlan = vlan.switch_context_params[0];
+            this.new_description = $scope.find(vlan.groups, 'command', 'description').value;
+            context.sections.splice($index, 1);
+        },
+        add: function($event, context) {
+            context.sections.push(
+                {
+                    "name": "VLAN " + this.new_vlan,
+                    "hidden": false,
+                    "ios_context": "vlan",
+                    "switch_context": "vlan",
+                    "switch_context_params": [
+                        this.new_vlan
+                    ],
+                    "indent": 1,
+                    "order": this.new_vlan,
+                    "removeable": true,
+                    "groups": [
+                        {
+                            "name": "Description",
+                            "command": "description",
+                            "ui": "text",
+                            "value": this.new_description 
+                        }
+                    ]
+                }
+            );
+            this.new_vlan = '';
+            this.new_description = '';
+        },
     }
 
     $scope.flatten = function(values) {
@@ -129,6 +166,15 @@ function models_controller($scope, $http) {
 
     $scope.array = function(element) {
         return [element];
+    }
+
+    $scope.find = function(list, field, value) {
+        for (var index in list) {
+            object = list[index];
+            if (object[field] && object[field] == value) {
+                return object;
+            }
+        }
     }
 
 }
