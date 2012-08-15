@@ -2,4 +2,5 @@
 *~
 
 # config files
-/configs/default-config.js
+/configs/models.json
+/configs/port-standards.json
