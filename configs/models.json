@@ -778,17 +778,18 @@
         "name": "6500-agg",
         "description": "Cisco C6500 Aggregation Switch",
         "hidden": false,
-        "config": [
-            {
+        "contexts": {
+            "global": {
                 "name": "Global Configuration",
                 "hidden": false,
+                "ios_context": "global",
                 "sections": [
                     {
                         "name": "General",
                         "hidden": false,
                         "groups": [
                             {
-                                "name": "power_redundancymode",
+                                "name": "Power Redundancy Mode",
                                 "command": "power_redundancymode",
                                 "ui": "select",
                                 "hidden": false,
@@ -803,13 +804,6 @@
                     }
                 ]
             }
-        ]
-    },
-    {
-        "name": "dummy",
-        "description": "Dummy",
-        "config": [
-
-        ]
+        }
     }
 ]
