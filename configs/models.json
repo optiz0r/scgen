@@ -519,6 +519,12 @@
                         "hidden": false,
                         "ui": "include",
                         "target": "vlans"
+                    },
+                    {
+                        "name": "Interface Configuration",
+                        "hidden": false,
+                        "ui": "include",
+                        "target": "interfaces"
                     }
                 ]
             },
@@ -707,7 +713,65 @@
                         ]
                     }
                 ]
+            },
+            "interfaces": {
+                "name": "Interface Configuration",
+                "hidden": false,
+                "ios_context": "global",
+                "sections": [
+                    {
+                        "name": "Interface FastEthernet0",
+                        "hidden": false,
+                        "ios_context": "interface",
+                        "switch_context": "interface",
+                        "switch_context_params": [
+                            "FastEthernet0"
+                        ],
+                        "indent": 1,
+                        "order": 0,
+                        "removeable": false,
+                        "groups": [
+                            {
+                                "name": "Description",
+                                "command": "description",
+                                "hidden": false,
+                                "ui": "text",
+                                "value": "Device|Port|Customer|Management|ChangeRef"
+                            },
+                            {
+                                "name": "Switchport",
+                                "command": "switchport",
+                                "hidden": true,
+                                "ui": "checkbox",
+                                "enabled": false
+                            },
+                            {
+                                "name": "IP Address",
+                                "command": "ip_address",
+                                "hidden": false,
+                                "ui": "ipsubnet",
+                                "values": {
+                                    "address": "192.168.0.2",
+                                    "mask": "255.255.255.0"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Add Interface",
+                        "hidden": false,
+                        "removeable": false,
+                        "order": "zzzz-last",
+                        "groups": [
+                            {
+                                "name": "New Interface",
+                                "ui": "addinterface"
+                            }
+                        ]
+                    }
+                ]
             }
+                
         }
     },
     {

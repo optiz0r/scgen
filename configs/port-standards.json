@@ -1,0 +1,420 @@
+[
+    {
+        "name": "Unused Port",
+        "groups": [
+            {
+                "name": "Description",
+                "command": "description",
+                "hidden": false,
+                "ui": "text",
+                "value": "Not in use"
+            },
+            {
+                "name": "Switchport",
+                "command": "switchport",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": true
+            },
+            {
+                "name": "Switchport Mode",
+                "command": "switchport_mode",
+                "hidden": true,
+                "ui": "select",
+                "selected": "access",
+                "values": {
+                    "access": "Access",
+                    "trunk": "Trunk"
+                }
+            },
+            {
+                "name": "Access VLAN",
+                "command": "switchport_access_vlan",
+                "hidden": true,
+                "ui": "number",
+                "value": "4093",
+                "validation": {
+                    "min": 1,
+                    "max": 4096
+                }
+            },
+            {
+                "name": "Trunk Negotiation",
+                "command": "switchport_nonegotiate",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": true
+            },
+            {
+                "name": "Logging Events",
+                "command": "logging_event",
+                "hidden": true,
+                "ui": "checkboxgroup",
+                "fields": [
+                    {
+                        "label": "Link Status",
+                        "hidden": false,
+                        "value": "link-status",
+                        "enabled": true
+                    }
+                ]
+            },
+            {
+                "name": "SNMP Traps",
+                "command": "snmp_trap",
+                "hidden": true,
+                "ui": "checkboxgroup",
+                "fields": [
+                    {
+                        "label": "Link Status",
+                        "hidden": false,
+                        "value": "link-status",
+                        "enabled": true
+                    }
+                ]
+            },
+            {
+                "name": "Link Speed",
+                "command": "speed",
+                "hidden": true,
+                "ui": "select",
+                "selected": "auto",
+                "values": {
+                    "auto": "Auto",
+                    "10": "10 MBPS",
+                    "100": "100 MBPS",
+                    "1000": "1000 MBPS"
+                } 
+            },
+            {
+                "name": "Link Duplex",
+                "command": "duplex",
+                "hidden": true,
+                "ui": "select",
+                "selected": "auto",
+                "values": {
+                    "auto": "Auto",
+                    "full": "Full",
+                    "half": "Half"
+                } 
+            },
+            {
+                "name": "CDP",
+                "command": "cdp_enable",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": false
+            },
+            {
+                "name": "Shutdown",
+                "command": "shutdown",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": false
+            }
+        ]
+    },
+    {
+        "name": "Dedicated Management",
+        "groups": [
+            {
+                "name": "Description",
+                "command": "description",
+                "hidden": false,
+                "ui": "text",
+                "value": "Device|Port|Customer|Description|ChangeRef"
+            },
+            {
+                "name": "Switchport",
+                "command": "switchport",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": false
+            },
+            {
+                "name": "IP Address",
+                "command": "ip_address",
+                "hidden": false,
+                "ui": "ipsubnet",
+                "values": {
+                    "address": "",
+                    "mask": ""
+                }
+            }
+        ]
+    },
+    {
+        "name": "Server Access Port",
+        "groups": [
+            {
+                "name": "Description",
+                "command": "description",
+                "hidden": false,
+                "ui": "text",
+                "value": "Device|Port|Customer|Description|ChangeRef"
+            },
+            {
+                "name": "Switchport",
+                "command": "switchport",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": true
+            },
+            {
+                "name": "Switchport Mode",
+                "command": "switchport_mode",
+                "hidden": true,
+                "ui": "select",
+                "selected": "access",
+                "values": {
+                    "access": "Access",
+                    "trunk": "Trunk"
+                }
+            },
+            {
+                "name": "Access VLAN",
+                "command": "switchport_access_vlan",
+                "hidden": false,
+                "ui": "number",
+                "value": "",
+                "validation": {
+                    "min": 1,
+                    "max": 4096
+                }
+            },
+            {
+                "name": "Trunk Negotiation",
+                "command": "switchport_nonegotiate",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": true
+            },
+            {
+                "name": "Logging Events",
+                "command": "logging_event",
+                "hidden": true,
+                "ui": "checkboxgroup",
+                "fields": [
+                    {
+                        "label": "Link Status",
+                        "hidden": false,
+                        "value": "link-status",
+                        "enabled": true
+                    }
+                ]
+            },
+            {
+                "name": "SNMP Traps",
+                "command": "snmp_trap",
+                "hidden": true,
+                "ui": "checkboxgroup",
+                "fields": [
+                    {
+                        "label": "Link Status",
+                        "hidden": false,
+                        "value": "link-status",
+                        "enabled": true
+                    }
+                ]
+            },
+            {
+                "name": "Link Speed",
+                "command": "speed",
+                "hidden": false,
+                "ui": "select",
+                "selected": "1000",
+                "values": {
+                    "10": "10 MBPS",
+                    "100": "100 MBPS",
+                    "1000": "1000 MBPS"
+                } 
+            },
+            {
+                "name": "Link Duplex",
+                "command": "duplex",
+                "hidden": false,
+                "ui": "select",
+                "selected": "full",
+                "values": {
+                    "full": "Full",
+                    "half": "Half"
+                } 
+            },
+            {
+                "name": "CDP",
+                "command": "cdp_enable",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": false
+            },
+            {
+                "name": "Portfast",
+                "command": "spanningtree_portfast",
+                "hidden": true,
+                "ui": "checkbox",
+                "value": "",
+                "enabled": true
+            },
+            {
+                "name": "BPDU Guard",
+                "command": "spanningtree_bpduguard",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": true
+            },
+            {
+                "name": "Shutdown",
+                "command": "shutdown",
+                "hidden": false,
+                "ui": "checkbox",
+                "enabled": true
+            }
+        ]
+    },
+    {
+        "name": "Server Trunk Port",
+        "groups": [
+            {
+                "name": "Description",
+                "command": "description",
+                "hidden": false,
+                "ui": "text",
+                "value": "Device|Port|Customer|Description|ChangeRef"
+            },
+            {
+                "name": "Switchport",
+                "command": "switchport",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": true
+            },
+            {
+                "name": "Switchport Mode",
+                "command": "switchport_mode",
+                "hidden": true,
+                "ui": "select",
+                "selected": "trunk",
+                "values": {
+                    "access": "Access",
+                    "trunk": "Trunk"
+                }
+            },
+            {
+                "name": "Access VLAN",
+                "command": "switchport_access_vlan",
+                "hidden": true,
+                "ui": "number",
+                "value": "4093",
+                "validation": {
+                    "min": 1,
+                    "max": 4096
+                }
+            },
+            {
+                "name": "Native VLAN",
+                "command": "switchport_trunk_native_vlan",
+                "hidden": false,
+                "ui": "number",
+                "value": "4094",
+                "validation": {
+                    "min": 1,
+                    "max": 4096
+                }
+            },
+            {
+                "name": "Allowed VLANs",
+                "command": "switchport_trunk_allowed_vlan",
+                "hidden": false,
+                "ui": "text",
+                "value": "none"
+            },
+            {
+                "name": "Trunk Negotiation",
+                "command": "switchport_nonegotiate",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": true
+            },
+            {
+                "name": "Logging Events",
+                "command": "logging_event",
+                "hidden": true,
+                "ui": "checkboxgroup",
+                "fields": [
+                    {
+                        "label": "Link Status",
+                        "hidden": false,
+                        "value": "link-status",
+                        "enabled": true
+                    }
+                ]
+            },
+            {
+                "name": "SNMP Traps",
+                "command": "snmp_trap",
+                "hidden": true,
+                "ui": "checkboxgroup",
+                "fields": [
+                    {
+                        "label": "Link Status",
+                        "hidden": false,
+                        "value": "link-status",
+                        "enabled": true
+                    }
+                ]
+            },
+            {
+                "name": "Link Speed",
+                "command": "speed",
+                "hidden": false,
+                "ui": "select",
+                "selected": "1000",
+                "values": {
+                    "10": "10 MBPS",
+                    "100": "100 MBPS",
+                    "1000": "1000 MBPS"
+                } 
+            },
+            {
+                "name": "Link Duplex",
+                "command": "duplex",
+                "hidden": false,
+                "ui": "select",
+                "selected": "full",
+                "values": {
+                    "full": "Full",
+                    "half": "Half"
+                } 
+            },
+            {
+                "name": "CDP",
+                "command": "cdp_enable",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": false
+            },
+            {
+                "name": "Portfast",
+                "command": "spanningtree_portfast",
+                "hidden": true,
+                "ui": "checkbox",
+                "value": "trunk",
+                "enabled": true
+            },
+            {
+                "name": "BPDU Guard",
+                "command": "spanningtree_bpduguard",
+                "hidden": true,
+                "ui": "checkbox",
+                "enabled": true
+            },
+            {
+                "name": "Shutdown",
+                "command": "shutdown",
+                "hidden": false,
+                "ui": "checkbox",
+                "enabled": true
+            }
+        ]
+    }
+]

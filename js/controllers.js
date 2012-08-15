@@ -1,10 +1,17 @@
-function models_controller($scope, $http) {
+function models_controller($scope, $http, $parse) {
     $scope.models = [];
     $scope.selected_model = undefined;
+
+    $scope.standards = [];
 
     $http.get('configs/models.json').success(function(data) {
         $scope.models = data;
         $scope.selected_model = $scope.models.length > 0 ? $scope.models[0] : undefined;
+    });
+
+    $http.get('configs/port-standards.json').success(function(data) {
+        $scope.port_standards = data;
+        $scope.interfaces.new_standard = $scope.find($scope.port_standards, 'name', 'Unused Port');
     });
 
     $scope.nothidden = function(input) {
@@ -113,38 +120,66 @@ function models_controller($scope, $http) {
     $scope.vlans = {
         new_vlan: '',
         new_description: '',
-        remove: function($event, context, $index) {
-            vlan = context.sections[$index];
-            this.new_vlan = vlan.switch_context_params[0];
-            this.new_description = $scope.find(vlan.groups, 'command', 'description').value;
-            context.sections.splice($index, 1);
-        },
         add: function($event, context) {
-            context.sections.push(
-                {
-                    "name": "VLAN " + this.new_vlan,
-                    "hidden": false,
-                    "ios_context": "vlan",
-                    "switch_context": "vlan",
-                    "switch_context_params": [
-                        this.new_vlan
-                    ],
-                    "indent": 1,
-                    "order": this.new_vlan,
-                    "removeable": true,
-                    "groups": [
-                        {
-                            "name": "Description",
-                            "command": "description",
-                            "ui": "text",
-                            "value": this.new_description 
-                        }
-                    ]
-                }
-            );
+            context.sections.push({
+                "name": "VLAN " + this.new_vlan,
+                "hidden": false,
+                "ios_context": "vlan",
+                "switch_context": "vlan",
+                "switch_context_params": [
+                    this.new_vlan
+                ],
+                "indent": 1,
+                "order": this.new_vlan,
+                "removeable": true,
+                "groups": [
+                    {
+                        "name": "Description",
+                        "command": "description",
+                        "ui": "text",
+                        "value": this.new_description 
+                    }
+                ]
+            });
             this.new_vlan = '';
             this.new_description = '';
         },
+    }
+
+    $scope.interfaces = {
+        new_interface: '',
+        new_standard: undefined,
+        add: function($event, context) {
+            context.sections.push({
+                "name": "Interface " + this.new_interface,
+                "hidden": false,
+                "ios_context": "interface",
+                "switch_context": "interface",
+                "switch_context_params": [
+                    this.new_interface
+                ],
+                "indent": 1,
+                "order": this.new_interface,
+                "removeable": true,
+                "groups": this.new_standard.groups
+            });
+
+            this.new_interface = '';
+            this.new_standard = $scope.find($scope.port_standards, 'name', 'Unused Port'); 
+        }
+    }
+
+    $scope.sections = {
+        remove: function($event, context, key, value) {
+            search = $parse(key);
+            for (var i in context.sections) {
+                item = search(context.sections[i]);
+                if (item == value) {
+                    context.sections.splice(i, 1);
+                    return;
+                }
+            }
+        }
     }
 
     $scope.flatten = function(values) {

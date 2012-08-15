@@ -17,7 +17,6 @@
         <script src="lib/sihnon/sihnon-framework.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/ui.js"></script>
-        <script src="configs/default-config.js"></script>
         <script src="js/directives.js"></script>
         <script src="js/filters.js"></script>
         <script src="js/controllers.js"></script>
@@ -119,6 +118,15 @@
                                                         <label class="control-label">{{group.name}}</label>
                                                         <div class="controls">
                                                             <textarea name="{{group.command}}" rows="6" cols="45" wrap="off" class="span4">{{flatten(group.value)}}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div ng-switch-when="ipsubnet">
+                                                    <div class="control-group">
+                                                        <label class="control-label">{{group.name}}</label>
+                                                        <div class="controls">
+                                                            <input type="text" placeholder="IP Address" ng-model="group.values.address" />
+                                                            <input type="text" placeholder="Subnet Mask" ng-model="group.values.mask" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -316,168 +324,36 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div ng-switch-when="addinterface">
+                                                    <div class="control-group">
+                                                        <label>New Interface</label>
+                                                        <div class="controls">
+                                                            <input type="text" placeholder="New Interface"  ng-model="interfaces.new_interface" />
+                                                            <select ng-model="interfaces.new_standard" ng-options="standard as standard.name for standard in port_standards"></select>
+                                                            <div>
+																<button class="btn btn-success" ng-click="interfaces.add($event, context);">
+																	<i class="icon-edit icon-white"></i> Add Interface
+																</button>
+															</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div ng-switch-default>
                                                     Unsupported UI {{group.ui}}
                                                 </div>
                                             </ng-switch>
+                                            <div class="control-group" ngm-if="section.removeable">
+                                                <div class="controls">
+                                                    <button class="btn btn-danger" ng-click="sections.remove($event, context, 'switch_context_params[0]', section.switch_context_params[0]);">
+                                                        <i class="icon-remove icon-white"></i> Remove
+                                                </div>
+                                            </div>
                                         </fieldset>
                                     </ng-switch>
-                                    <div class="control-group" ngm-if="section.removeable">
-                                        <div class="controls">
-                                            <button class="btn btn-danger" ng-click="vlans.remove($event, context, $index);">
-                                                <i class="icon-remove icon-white"></i> Remove VLAN
-                                        </div>
-                                    </div>
                                 </div>
                             </script>
                             <ng-include src="'context.tpl'" ng-repeat="context in array(selected_model.contexts.global)"></ng-include>
                         </div>
-
-                        <h2>Interface Configuration</h2>
-                        <fieldset>
-                            <legend>Interfaces</legend>
-
-                            <table id="interfaces" class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Interface</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                        <th>Parameters</th>
-                                        <th>Remove</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="interfaces_list">
-                                </tbody>
-                            </table>
-                        </fieldset>
-
-                        <fieldset><!--{{{-->
-                            <legend>Add Interfaces</legend>
-
-                            <div class="control-group">
-                                <label class="control-label" for="interface_add_type">Interface Type</label>
-                                <div class="controls">
-                                    <select id="interface_add_type" name="interface_add_type">
-                                        <option value="Ethernet">Ethernet</option>
-                                        <option value="FastEthernet">FastEthernet</option>
-                                        <option value="GigabitEthernet" selected="selected">GigabitEthernet</option>
-                                        <option value="TenGigabitEthernet">TenGigabitEthernet</option>
-                                        <option value="PortChannel">PortChannel</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="interface_add_slot">Slot</label>
-                                <div class="controls">
-                                    <input type="text" id="interface_add_slot" name="interface_add_slot" maxlength="2" value="1" class="validate not_empty numeric" />
-                                    <label class="checkbox" for="interface_add_use_slot">
-                                        <input type="checkbox" id="interface_add_use_slot" value="1" checked="checked">
-                                        Use subslot
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="interface_add_subslot">Subslot</label>
-                                <div class="controls">
-                                    <input type="text" id="interface_add_subslot" name="interface_add_subslot" maxlength="2" value="0" class="validate not_empty numeric" />
-                                    <label class="checkbox" for="interface_add_use_subslot">
-                                        <input type="checkbox" id="interface_add_use_subslot" value="1" checked="checked">
-                                        Use subslot
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="interface_add_start">Start</label>
-                                <div class="controls">
-                                    <input type="text" id="interface_add_start" name="interface_add_start" maxlength="2" value="1" class="validate not_empty numeric" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="interface_add_count">Count</label>
-                                <div class="controls">
-                                    <input type="text" id="interface_add_count" name="interface_add_count" maxlength="2" value="24" class="validate not_empty numeric" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <div class="controls">
-                                    <button class="btn btn-success" id="interface_add" name="interface_add">Add Interfaces</button>
-                                </div>
-                            </div>
-
-                        </fieldset>
-
-
-                        <h2>SVI Configuration</h2>
-                        <fieldset><!--{{{-->
-                            <legend>SVIs</legend>
-     
-                            <table class="table"><!--{{{-->
-                                <thead>
-                                    <tr>
-                                        <th>Interface</th>
-                                        <th>Description</th>
-                                        <th>Enable IP?</th>
-                                        <th>Address</th>
-                                        <th>Subnet Mask</th>
-                                        <th>Remove</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="svis_list">
-                                </tbody>
-                            </table><!--}}}-->
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Add SVI</legend>
-
-                            <div class="control-group">
-                                <label for="add_svi_interface">VLAN</label>
-                                <div class="controls">
-                                    <input type="text" id="add_svi_interface" name="interface" value="" placeholder="VLAN ID" maxlength="8" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="add_svi_description">Description</label>
-                                <div class="controls">
-                                    <input type="text" id="add_svi_description" name="description" value="" maxlength="32" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="add_svi_enable">Enable IP?</label>
-                                <div class="controls">
-                                    <input type="checkbox" id="add_svi_enable" name="enable" checked="checked" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="add_svi_address">Address</label>
-                                <div class="controls">
-                                    <input type="text" id="add_svi_address" name="address" value="" maxlength="15" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="add_svi_mask">Mask</label>
-                                <div class="controls">
-                                    <input type="text" id="add_svi_mask" name="mask" value="255.255.255.0" maxlength="15" />
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <div class="controls">
-                                    <button class="btn btn-success" id="add_svi_add" name="add_svi_add">Add SVI</button>
-                                </div>
-                            </div>
-                        </fieldset>
-
                     </form>
                 </div><!-- span6 -->
                 <div class="span6" id="script_container"><!--{{{-->
@@ -499,12 +375,8 @@
                                                             <div ng-switch-default>
                                                                 <div ng-repeat="field in group.fields">
                                                                     <ng-switch on="group.ui">
-                                                                        <div ng-switch-when="checkboxgroup">
-                                                                            {{field.command||group.command|ioscommand:context.ios_context:field.value:!field.enabled:group.indent||0}}
-                                                                        </div>
-                                                                        <div ng-switch-default>
-                                                                            {{group.command|ioscommand:context.ios_context:field.value:false:group.indent||0}}
-                                                                        </div>
+                                                                        <div ng-switch-when="checkboxgroup" class="code">{{field.command||group.command|ioscommand:section.ios_context||context.ios_context:field.value:!field.enabled:group.indent||section.indent||0}}</div>
+                                                                        <div ng-switch-default class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:field.value:false:group.indent||section.indent||0}}</div>
                                                                     </ng-switch> 
                                                                 </div>
                                                             </div>
@@ -514,23 +386,25 @@
                                                                     <div ng-switch-when="number" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.value:false:group.indent||section.indent||0}}</div>
                                                                     <div ng-switch-when="checkbox" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.value:!group.enabled:group.indent||section.indent||0}}</div>
                                                                     <div ng-switch-when="select" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:group.selected:false:group.indent||section.indent||0}}</div>
-                                                                    <div ng-switch-when="textarea" class="code">{{group.command|ioscommand:context.ios_context:{name: group.banner_type, contents: flatten(group.value)}:group.indent||section.indent||0}}</div>
+                                                                    <div ng-switch-when="textarea" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:{name: group.banner_type, contents: flatten(group.value)}:false:group.indent||section.indent||0}}</div>
+                                                                    <div ng-switch-when="ipsubnet" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:{address: group.values.address, mask: group.values.mask}:false:group.indent||section.indent||0}}</div>
                                                                     <div ng-switch-when="hosts">
-                                                                        <div ng-repeat="(host, address) in group.values | orderBy:'host'" class="code">{{group.command|ioscommand:context.ios_context:hosts.command(host, address):group.indent||section.indent||0}}</div>
+                                                                        <div ng-repeat="(host, address) in group.values | orderBy:'host'" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:hosts.command(host, address):group.indent||section.indent||0}}</div>
                                                                     </div>
                                                                     <div ng-switch-when="routes">
-                                                                        <div ng-repeat="route in group.values | orderBy:'subnet'" class="code">{{group.command|ioscommand:context.ios_context:routes.command(route.subnet, route.mask, route.gateway):group.indent||section.indent||0}}</div>
+                                                                        <div ng-repeat="route in group.values | orderBy:'subnet'" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:routes.command(route.subnet, route.mask, route.gateway):group.indent||section.indent||0}}</div>
                                                                     </div>
                                                                     <div ng-switch-when="stpdisable">
-                                                                        <div ng-repeat="vlan in group.values.sort()" class="code">{{group.command|ioscommand:context.ios_context:stpdisable.command(vlan):group.indent||section.indent||0}}</div>
+                                                                        <div ng-repeat="vlan in group.values.sort()" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:stpdisable.command(vlan):group.indent||section.indent||0}}</div>
                                                                     </div>
                                                                     <div ng-switch-when="servers">
-                                                                        <div ng-repeat="server in group.values.sort()" class="code">{{group.command|ioscommand:context.ios_context:servers.command(server):group.indent||section.indent||0}}</div>
+                                                                        <div ng-repeat="server in group.values.sort()" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:servers.command(server):group.indent||section.indent||0}}</div>
                                                                     </div>
                                                                     <div ng-switch-when="aliases">
-                                                                        <div ng-repeat="alias in group.values.sort() | orderBy:['context','name']" class="code">{{group.command|ioscommand:context.ios_context:aliases.command(alias.context, alias.name, alias.command):group.indent||section.indent||0}}</div>
+                                                                        <div ng-repeat="alias in group.values.sort() | orderBy:['context','name']" class="code">{{group.command|ioscommand:section.ios_context||context.ios_context:aliases.command(alias.context, alias.name, alias.command):group.indent||section.indent||0}}</div>
                                                                     </div>
 																	<div ng-switch-when="addvlan"></div>
+                                                                    <div ng-switch-when="addinterface"></div>
                                                                     <div ng-switch-default>
                                                                         ! unsupported type {{group.ui}}
                                                                     </div>
@@ -545,7 +419,6 @@
                                     </code>
                                 </script>
                                 <ng-include src="'context-output.tpl'" ng-repeat="context in array(selected_model.contexts.global)"></ng-include>
-                                <textarea class="span6" wrap="off" id="generated_config"></textarea>
                             </div>
                         </fieldset>
                     </form>
@@ -570,177 +443,6 @@
                     </footer>
                 </div>
             </div>
-        <div id="template_container">
-            <div id="ispNone">
-                <p><em>none</em></p>
-            </div>
-            <div id="ispPortChannelGroup">
-                <div class="control-group">
-                    <label class="control-label" for="interface_portid_channelgroup_group">Channel Group</label>
-                    <div class="controls">
-                        <input type="text" id="interface_portid_channelgroup_group" name="channelgroup" value="" maxlength="2" class="config span1" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="interface_portid_channelgroup_mode">Mode</label>
-                    <div class="controls">
-                        <select id="interface_portid_channelgroup_mode" name="channelgroup" class="config span2">
-                            <option value="active">Active</option>
-                            <option value="on">On</option>
-                            <option value="auto">Auto</option>
-                            <option value="desirable" selected="selected">Desirable</option>
-                            <option value="passive">Passive</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div id="ispSwitchportAccessVLAN">
-                <div class="control-group">
-                    <label class="control-label" for="interface_portid_switchport_access_vlan">Access VLAN</label>
-                    <div class="controls">
-                        <input type="text" id="interface_portid_switchport_access_vlan" name="switchport_access_vlan" value="" maxlength="4" placeholder="VLAN ID" class="config add_validate not_empty add_numeric span2" />
-                    </div>
-                </div>
-            </div>
-            <div id="ispSwitchportVoiceVLAN">
-                <div class="control-group">
-                    <label class="control-label" for="interface_portid_switchport_voice_vlan">Voice VLAN</label>
-                    <div class="controls">
-                        <input type="text" id="interface_portid_switchport_voice_vlan" name="switchport_voice_vlan" value="" maxlength="4" placeholder="VLAN ID" class="config add_validate not_empty add_numeric span2" />
-                    </div>
-                </div>
-            </div>
-            <div id="ispSpeedDuplex">
-                <div class="control-group">
-                    <label class="control-label" for="interface_portid_speed">Speed</label>
-                    <div class="controls">
-                        <select id="interface_portid_speed" name="speed" class="config span2">
-                            <option value="10">10 MBPS</option>
-                            <option value="100">100 MBPS</option>
-                            <option value="1000" selected="selected">1000 MBPS</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="interface_portid_duplex">Duplex</label>
-                    <div class="controls">
-                        <select id="interface_portid_duplex" name="duplex" class="config span2">
-                            <option value="half">Half</option>
-                            <option value="full" selected="selected">Full</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div id="ispSwitchportTrunk">
-                <div class="control-group">
-                    <label class="control-label" for="interface_portid_switchport_trunk_native_vlan">Trunk Native VLAN</label>
-                    <div class="controls">
-                        <input type="text" id="interface_portid_switchport_trunk_native_vlan" name="switchport_trunk_native_vlan" value="" maxlength="4" placeholder="VLAN ID" class="config add_validate not_empty add_numeric span2" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="interface_portid_switchport_trunk_allowed_vlan">Trunk Allowed Vlans</label>
-                    <div class="controls">
-                        <input type="text" id="interface_portid_switchport_trunk_allowed_vlan" name="switchport_trunk_allowed_vlan" value="" placeholder="VLAN List" class="config add_validate not_empty add_numeric_list span3" />
-                    </div>
-                </div>
-            </div>
-            <div id="ispPrivateVLAN">
-                <div class="control-group">
-                    <label class="control-label" for="interface_portid_switchport_private-vlan_host-association_parent">Private VLAN Host-association (parent)</label>
-                    <div class="controls">
-                        <input type="text" id="interface_portid_switchport_private-vlan_host-association_parent" name="switchport_privatevlan_hostassociation" value="" maxlength="4" placeholder="VLAN ID" class="config add_validate not_empty add_numeric span2" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="interface_portid_switchport_private-vlan_host-association_children">Private VLAN Host-association (children)</label>
-                    <div class="controls">
-                        <input type="text" id="interface_portid_switchport_private-vlan_host-association_children" name="switchport_privatevlan_hostassociation" value="" placeholder="VLAN List" class="config add_validate not_empty add_numeric_list span3" />
-                    </div>
-                </div>
-            </div>
-            <div id="vlan_template">
-                <table id="vlan_template_table"><!--{{{-->
-                    <tbody id="vlan_template_body">
-                        <tr class="context_parent">
-                            <td>
-                                vlanid
-                                <input type="hidden" id="vlan_vlanid_name" name="vlan" value="vlanid" class="add_global" />
-                                <input type="hidden" id="vlan_vlanid_switch" name="__switch" value="vlan" class="add_global" />
-                            </td>
-                            <td>
-                                <input type="text" id="vlan_vlanid_description" name="description" maxlength="32" value="" class="add_vlan add_generate add_validate not_empty" />
-                            </td>
-                            <td>
-                                <button class="btn btn-danger remove-ui" id="vlan_vlanid_remove" name="remove">Remove</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table><!--}}}-->
-            </div><!-- /vlan_template -->
-            <div id="interface_template">
-                <table id="interface_template_table"><!--{{{-->
-                    <tbody id="interface_template_body">
-                        <tr class="context_parent">
-                            <td>
-                                <input type="hidden" id="interface_portid_id" name="interface_id" value="portid" />
-                                <input type="hidden" id="interface_portid_name" name="interface" value="portname" class="add_global" />
-                                <input type="hidden" id="interface_portid_switch" name="__switch" value="interface" class="add_global" />
-                                portname
-                            </td>
-                            <td>
-                                <select id="interface_portid_type" name="type" class="add_standards">
-                                    <!-- Autogenerated from configuration file -->
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" id="interface_portid_description" name="description" value="Not in use" placeholder="Description" class="add_interface add_generate add_validate not_empty" />
-                            </td>
-                            <td class="parameters">
-                                <p><em>none</em></p>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger remove-ui" id="interface_portid_remove" name="remove">Remove</button
-                            </td>
-                        </tr>
-                    </tbody>
-                </table><!--}}}-->
-            </div><!-- /interface_template -->
-            <div id="svi_template">
-                <table id="svi_template_table"><!--{{{-->
-                    <tbody id="svi_template_body">
-                        <tr class="context_parent">
-                            <td>
-                                <input type="hidden" id="interface_sviid_name" name="interface" value="sviid" class="add_global" />
-                                <input type="hidden" id="interface_sviid_switch" name="__switch" value="svi" class="add_global" />
-                                sviid
-                            </td>
-                            <td>
-                                <div class="control-group">
-                                    <input type="text" id="interface_sviid_description" name="description" maxlength="32" value="" class="add_svi add_generate add_validate not_empty" />
-                                    </div.
-                            </td>
-                            <td>
-                                <input type="checkbox" id="interface_sviid_enable_ip" name="ip_address" checked="checked" class="add_svi add_generate toggle_external_values" />
-                            </td>
-                            <td>
-                                <div class="control-group">
-                                    <input type="text" id="interface_sviid_address" name="ip_address" maxlength="15" value="" class="add_generate add_validate not_empty add_ip" />
-                                </div>
-                            </td> 
-                            <td>
-                                <div class="control-group">
-                                    <input type="text" id="interface_sviid_mask" name="ip_address" maxlength="15" value="" class="add_generate add_validate not_empty add_ip" />
-                                </div>
-                            </td> 
-                            <td>
-                                <button class="btn btn-danger remove-ui" id="interface_sviid_remove" name="remove">Remove</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table><!--}}}-->
-            </div><!-- /svi_template -->
-        </div><!-- /template_container -->
     </body>
 </html>
 
